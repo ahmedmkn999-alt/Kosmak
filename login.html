@@ -15,7 +15,7 @@
     <style>
         body { background-color: #030508; color: white; font-family: 'Cairo', sans-serif; }
         
-        /* حقل الإدخال */
+        /* تصميم حقل الإدخال */
         .login-input-container {
             background-color: #11141d;
             border: 1px solid rgba(255,255,255,0.1);
@@ -29,7 +29,7 @@
         
         .logo-text { direction: ltr; display: inline-flex; gap: 4px; }
         
-        /* تأثير النيون */
+        /* تأثير النيون للزر */
         .neon-glow {
             box-shadow: 0 0 25px rgba(0, 245, 196, 0.4);
         }
@@ -49,19 +49,19 @@
             const handleLogin = (e) => {
                 e.preventDefault();
                 alert("جاري التحقق من الكود...");
-                // هنا تضع كود التحقق الفعلي
+                // هنا منطق الدخول
             };
 
             return (
                 <div className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
                     
-                    {/* خلفية بتأثيرات ضوئية خفيفة */}
+                    {/* خلفية بتأثيرات ضوئية */}
                     <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#00f5c4]/5 blur-[120px] rounded-full pointer-events-none"></div>
                     <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#00f5c4]/5 blur-[120px] rounded-full pointer-events-none"></div>
 
                     <div className="w-full max-w-md z-10">
                         
-                        {/* 1. اللوجو (زي التصميم بالظبط) */}
+                        {/* 1. اللوجو والعنوان */}
                         <div className="flex flex-col items-center mb-10">
                             <div className="flex items-center gap-3 mb-6">
                                 <h2 className="logo-text text-3xl font-black italic tracking-tighter text-white">
@@ -105,15 +105,20 @@
                         </form>
 
                         {/* 3. رابط الاشتراك المجاني (تليجرام الأدمن) */}
-                        <div className="mt-10 text-center">
-                            <p className="text-gray-400 text-sm mb-3">لسه معندكش حساب؟</p>
+                        <div className="mt-10 text-center flex flex-col md:flex-row items-center justify-center gap-2 text-lg">
+                            {/* الجزء الأبيض الثابت */}
+                            <span className="text-white font-medium">
+                                لسه معكش كود؟
+                            </span>
+                            
+                            {/* الجزء الملون القابل للضغط */}
                             <a 
                                 href="https://t.me/elgizawy9" 
                                 target="_blank"
-                                className="text-[#ff9f43] font-bold text-lg hover:text-[#ffb56b] transition-colors flex items-center justify-center gap-2 group"
+                                className="text-[#ff9f43] font-bold hover:text-[#ffb56b] transition-colors flex items-center gap-1 hover:underline decoration-2 underline-offset-4"
                             >
-                                لسه معكش كود؟ اشترك مجاني دلوقتي 
-                                <i data-lucide="external-link" width="16" className="group-hover:-translate-x-1 transition-transform"></i>
+                                اشترك مجاني دلوقتي 
+                                <i data-lucide="external-link" width="18"></i>
                             </a>
                         </div>
 
