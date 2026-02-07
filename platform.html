@@ -34,40 +34,6 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 30px -10px rgba(0, 245, 196, 0.1);
         }
-
-        /* Video Player Controls */
-        .video-control-btn {
-            background: rgba(0,0,0,0.5);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        .video-control-btn:hover { background: #00f5c4; color: black; }
-        
-        .progress-range {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 2px;
-            cursor: pointer;
-        }
-        .progress-range::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
-            background: #00f5c4;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-        .progress-range::-webkit-slider-thumb:hover { transform: scale(1.5); }
-
         .logo-text { direction: ltr; display: inline-flex; gap: 4px; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
@@ -79,20 +45,69 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // === 1. مكون مشغل الفيديو العالمي (HLS Player) ===
-        const VideoPlayer = ({ src, poster, onBack }) => {
+        // === 1. بيانات المنصة (مدمجة هنا لحل المشكلة) ===
+        // تم دمج البيانات من الملف المرفق
+        const rawData = [
+            {
+                "subjects": [
+                    {
+                        "subject_id": 43,
+                        "subject_name": "كيمياء",
+                        "image_url": "https://static.vecteezy.com/system/resources/previews/014/472/954/original/chemistry-logo-template-illustration-free-vector.jpg",
+                        "teachers": [
+                            {
+                                "id": 124,
+                                "name": "أ. محمد عبدالجواد",
+                                "image_url": "https://files.coursatk.online/images/questions/23b4ebea27532d1d05b2f7de5f26e63add3e4ca8ffcd.jpg",
+                                "chapters": [
+                                    {
+                                        "chapter_id": 569,
+                                        "chapter_name": "الأساسيات",
+                                        "lectures": [
+                                            {
+                                                "lecture_id": 3543,
+                                                "lecture_name": "التأسيس",
+                                                "videos": [
+                                                    {
+                                                        "video_id": 13292,
+                                                        "video_name": "التوزيع الإلكترونى و خواص الجدول الدورى 📅",
+                                                        "links": [
+                                                            {
+                                                                "label": 360,
+                                                                "url": "https://river-5-550.rtbcdn.ru/hls-vod/ejbNjBGoqeRs0IRSTjayGw/1770620541/2209/0x5000c5007446bb38/ad835cf61651459a88ab3f5307811fab.mp4.m3u8"
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "video_id": 15464,
+                                                        "video_name": "واجب الحركة الوطنية في عهد الاحتلال البريطاني",
+                                                        "links": [
+                                                            {
+                                                                "label": 360,
+                                                                "url": "https://river-3-346.rtbcdn.ru/hls-vod/Cm7fB4sRcABRCP_daLi-3A/1770811659/2626/0x5000039ce868e589/6472f4d2e7814b5381dd3885f48335df.mp4.m3u8"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // === 2. مكون مشغل الفيديو ===
+        const VideoPlayer = ({ src, onBack }) => {
             const videoRef = useRef(null);
-            const [isPlaying, setIsPlaying] = useState(false);
-            const [progress, setProgress] = useState(0);
-            const [duration, setDuration] = useState(0);
-            const [speed, setSpeed] = useState(1);
-            const [showControls, setShowControls] = useState(true);
 
             useEffect(() => {
                 const video = videoRef.current;
                 if (!video) return;
 
-                // إعداد HLS لتشغيل ملفات m3u8
                 if (Hls.isSupported() && src.includes('.m3u8')) {
                     const hls = new Hls();
                     hls.loadSource(src);
@@ -100,146 +115,51 @@
                 } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     video.src = src;
                 } else {
-                    video.src = src; // للفيديوهات العادية MP4
+                    video.src = src;
                 }
-
-                const updateProgress = () => setProgress((video.currentTime / video.duration) * 100);
-                video.addEventListener('timeupdate', updateProgress);
-                video.addEventListener('loadedmetadata', () => setDuration(video.duration));
-
-                return () => {
-                    video.removeEventListener('timeupdate', updateProgress);
-                };
             }, [src]);
-
-            const togglePlay = () => {
-                const video = videoRef.current;
-                if (video.paused) {
-                    video.play();
-                    setIsPlaying(true);
-                } else {
-                    video.pause();
-                    setIsPlaying(false);
-                }
-            };
-
-            const handleSeek = (e) => {
-                const video = videoRef.current;
-                const newTime = (e.target.value / 100) * video.duration;
-                video.currentTime = newTime;
-                setProgress(e.target.value);
-            };
-
-            const skip = (seconds) => {
-                videoRef.current.currentTime += seconds;
-            };
-
-            const changeSpeed = () => {
-                const newSpeed = speed === 1 ? 1.5 : (speed === 1.5 ? 2 : (speed === 2 ? 0.5 : 1));
-                videoRef.current.playbackRate = newSpeed;
-                setSpeed(newSpeed);
-            };
-
-            const formatTime = (time) => {
-                const minutes = Math.floor(time / 60);
-                const seconds = Math.floor(time % 60);
-                return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            };
 
             return (
                 <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center animate-in fade-in zoom-in duration-300">
                     <div className="w-full max-w-5xl aspect-video relative bg-black rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,245,196,0.1)] group">
-                        
-                        {/* زر الرجوع */}
                         <button onClick={onBack} className="absolute top-4 right-4 z-20 bg-black/50 p-2 rounded-full text-white hover:bg-[#00f5c4] hover:text-black transition-colors">
                             <i data-lucide="x" width="24"></i>
                         </button>
-
-                        <video 
-                            ref={videoRef}
-                            className="w-full h-full object-contain cursor-pointer"
-                            poster={poster}
-                            onClick={togglePlay}
-                        ></video>
-
-                        {/* أدوات التحكم المخصصة */}
-                        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/90 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            
-                            {/* شريط التقدم */}
-                            <div className="flex items-center gap-3 mb-2">
-                                <span className="text-xs font-mono">{formatTime(videoRef.current?.currentTime || 0)}</span>
-                                <input 
-                                    type="range" 
-                                    min="0" 
-                                    max="100" 
-                                    value={progress || 0} 
-                                    onChange={handleSeek}
-                                    className="progress-range"
-                                />
-                                <span className="text-xs font-mono">{formatTime(duration || 0)}</span>
-                            </div>
-
-                            {/* الأزرار */}
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    <button onClick={togglePlay} className="text-white hover:text-[#00f5c4]">
-                                        <i data-lucide={isPlaying ? "pause" : "play"} width="24" fill="currentColor"></i>
-                                    </button>
-                                    <button onClick={() => skip(-10)} className="text-white hover:text-[#00f5c4] text-xs flex flex-col items-center">
-                                        <i data-lucide="rotate-ccw" width="18"></i> -10s
-                                    </button>
-                                    <button onClick={() => skip(10)} className="text-white hover:text-[#00f5c4] text-xs flex flex-col items-center">
-                                        <i data-lucide="rotate-cw" width="18"></i> +10s
-                                    </button>
-                                </div>
-
-                                <div className="flex items-center gap-4">
-                                    <button onClick={changeSpeed} className="text-white font-bold text-sm bg-white/10 px-2 py-1 rounded hover:bg-[#00f5c4] hover:text-black transition-colors">
-                                        {speed}x
-                                    </button>
-                                    <button onClick={() => videoRef.current.requestFullscreen()} className="text-white hover:text-[#00f5c4]">
-                                        <i data-lucide="maximize" width="20"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <video ref={videoRef} className="w-full h-full" controls autoPlay></video>
                     </div>
                 </div>
             );
         };
 
-        // === 2. المكون الرئيسي للمنصة ===
+        // === 3. المنصة الرئيسية ===
         function Platform() {
-            const [view, setView] = useState('subjects'); // subjects, teachers, chapters, lectures, player
-            const [data, setData] = useState([]);
+            const [view, setView] = useState('subjects'); 
+            const [subjectsData, setSubjectsData] = useState([]);
+            
+            // State للتنقل
             const [selectedSubject, setSelectedSubject] = useState(null);
             const [selectedTeacher, setSelectedTeacher] = useState(null);
             const [selectedChapter, setSelectedChapter] = useState(null);
             const [selectedLecture, setSelectedLecture] = useState(null);
             const [selectedVideo, setSelectedVideo] = useState(null);
-            
+
             // بيانات الطالب
             const [studentCode, setStudentCode] = useState("---");
-            const [studentName, setStudentName] = useState("بطل الثانوية");
             const [timeLeft, setTimeLeft] = useState("");
 
             useEffect(() => {
                 lucide.createIcons();
                 
-                // جلب البيانات من data.json
-                fetch('data.json')
-                    .then(res => res.json())
-                    .then(jsonData => {
-                        // البيانات بتيجي مصفوفة، هناخد أول عنصر لو هو الهيكل الرئيسي
-                        setData(jsonData[0]?.subjects ? jsonData[0].subjects : []); 
-                    })
-                    .catch(err => console.error("Error loading data:", err));
+                // تحميل البيانات من المتغير المدمج مباشرة
+                if(rawData[0] && rawData[0].subjects) {
+                    setSubjectsData(rawData[0].subjects);
+                }
 
-                // جلب بيانات الطالب من LocalStorage
+                // كود الطالب
                 const savedCode = localStorage.getItem('studentCode');
                 if (savedCode) setStudentCode(savedCode);
 
-                // العداد التنازلي (مثلاً لامتحانات يونيو)
+                // العداد
                 const targetDate = new Date("June 10, 2026 00:00:00").getTime();
                 const timer = setInterval(() => {
                     const now = new Date().getTime();
@@ -248,17 +168,11 @@
                     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     setTimeLeft(`${days} يوم و ${hours} ساعة`);
                 }, 1000);
-
                 return () => clearInterval(timer);
             }, []);
 
-            useEffect(() => lucide.createIcons(), [view, data]);
+            useEffect(() => lucide.createIcons(), [view]);
 
-            // دوال التنقل
-            const goToTeachers = (subject) => { setSelectedSubject(subject); setView('teachers'); };
-            const goToChapters = (teacher) => { setSelectedTeacher(teacher); setView('chapters'); };
-            const goToLectures = (chapter) => { setSelectedChapter(chapter); setView('lectures'); };
-            const playVideo = (video, lecture) => { setSelectedVideo(video); setSelectedLecture(lecture); setView('player'); };
             const goBack = () => {
                 if (view === 'player') setView('lectures');
                 else if (view === 'lectures') setView('chapters');
@@ -269,8 +183,8 @@
             return (
                 <div className="min-h-screen pb-20">
                     
-                    {/* === Navbar === */}
-                    <nav className="glass-effect sticky top-0 z-40 border-b border-white/5 bg-[#030508]/80 backdrop-blur-md">
+                    {/* Navbar */}
+                    <nav className="sticky top-0 z-40 border-b border-white/5 bg-[#030508]/90 backdrop-blur-md">
                         <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
                             <div className="flex items-center gap-3">
                                 <img src="https://i.postimg.cc/2ys9RdV5/IMG-20260207-221213-980.jpg" className="w-10 h-10 rounded-lg border border-white/20 shadow-lg" />
@@ -295,50 +209,40 @@
 
                     <div className="max-w-7xl mx-auto px-4 pt-6">
                         
-                        {/* === الصفحة الشخصية (تظهر فقط في الرئيسية) === */}
+                        {/* الصفحة الشخصية (فقط في الرئيسية) */}
                         {view === 'subjects' && (
                             <header className="mb-12 animate-in fade-in slide-in-from-top-4 duration-500">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    
-                                    {/* كارت الطالب */}
-                                    <div className="card-glass p-6 rounded-3xl flex items-center gap-4 relative overflow-hidden group">
+                                    <div className="card-glass p-6 rounded-3xl flex items-center gap-4 relative overflow-hidden">
                                         <div className="absolute top-0 right-0 w-1 h-full bg-[#00f5c4]"></div>
                                         <div className="w-16 h-16 rounded-full bg-[#1a1f2e] border-2 border-[#00f5c4]/30 flex items-center justify-center relative">
                                             <i data-lucide="user" width="30" className="text-gray-400"></i>
-                                            <div className="absolute bottom-0 right-0 w-5 h-5 bg-[#00f5c4] rounded-full border-2 border-[#030508] flex items-center justify-center">
-                                                <i data-lucide="plus" width="12" className="text-black"></i>
-                                            </div>
                                         </div>
                                         <div>
-                                            <h3 className="text-xl font-bold text-white">أهلاً، {studentName}</h3>
+                                            <h3 className="text-xl font-bold text-white">أهلاً يا بطل</h3>
                                             <p className="text-sm text-gray-400 mt-1">الكود: <span className="text-[#00f5c4] font-mono">{studentCode}</span></p>
                                         </div>
                                     </div>
 
-                                    {/* كارت العداد */}
-                                    <div className="card-glass p-6 rounded-3xl md:col-span-2 flex flex-col justify-center items-center relative overflow-hidden text-center">
-                                        <div className="absolute inset-0 bg-gradient-to-r from-[#00f5c4]/5 to-transparent"></div>
+                                    <div className="card-glass p-6 rounded-3xl md:col-span-2 flex flex-col justify-center items-center text-center">
                                         <h4 className="text-gray-400 text-sm mb-2 font-bold flex items-center gap-2">
-                                            <i data-lucide="hourglass" width="16" className="text-[#ff9f43]"></i> باقي على الحلم
+                                            <i data-lucide="hourglass" width="16" className="text-[#ff9f43]"></i> باقي على الامتحانات
                                         </h4>
                                         <div className="text-3xl md:text-4xl font-black text-white tracking-tighter">
-                                            {timeLeft || "جاري الحساب..."}
+                                            {timeLeft || "..."}
                                         </div>
-                                        <p className="text-xs text-gray-500 mt-2">شد حيلك يا بطل، هانت! 💪</p>
                                     </div>
-
                                 </div>
                             </header>
                         )}
 
-                        {/* === عرض المواد (Subjects) === */}
+                        {/* 1. المواد */}
                         {view === 'subjects' && (
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-in fade-in duration-500">
-                                {data.map((sub, idx) => (
-                                    <div key={idx} onClick={() => goToTeachers(sub)} className="card-glass p-4 rounded-2xl cursor-pointer text-center group">
+                                {subjectsData.map((sub, idx) => (
+                                    <div key={idx} onClick={() => { setSelectedSubject(sub); setView('teachers'); }} className="card-glass p-4 rounded-2xl cursor-pointer text-center group">
                                         <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#1a1f2e] flex items-center justify-center border border-white/10 group-hover:border-[#00f5c4] transition-colors overflow-hidden">
-                                            <img src={sub.image_url} alt={sub.subject_name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" onError={(e) => {e.target.style.display='none';}} />
-                                            {/* أيقونة بديلة في حالة عدم وجود صورة */}
+                                            <img src={sub.image_url} className="w-full h-full object-cover" onError={(e)=>{e.target.style.display='none'}} />
                                             <i data-lucide="book-open" className="text-gray-500 absolute z-[-1]" width="30"></i>
                                         </div>
                                         <h3 className="text-lg font-bold text-white group-hover:text-[#00f5c4] transition-colors">{sub.subject_name}</h3>
@@ -348,7 +252,7 @@
                             </div>
                         )}
 
-                        {/* === عرض المدرسين (Teachers) === */}
+                        {/* 2. المدرسين */}
                         {view === 'teachers' && selectedSubject && (
                             <div className="animate-in fade-in slide-in-from-right-8 duration-300">
                                 <h2 className="text-2xl font-black mb-6 flex items-center gap-2">
@@ -356,6 +260,60 @@
                                 </h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {selectedSubject.teachers?.map((teacher, idx) => (
-                                        <div key={idx} onClick={() => goToChapters(teacher)} className="card-glass p-6 rounded-3xl flex items-center gap-5 cursor-pointer group">
-                                            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-gray-800 to-black overflow-hidden border border-white/10 group-hover:border-[#00f5c4]/50 transition-all">
-                                             
+                                        <div key={idx} onClick={() => { setSelectedTeacher(teacher); setView('chapters'); }} className="card-glass p-6 rounded-3xl flex items-center gap-5 cursor-pointer group">
+                                            <div className="w-20 h-20 rounded-2xl bg-gray-800 overflow-hidden border border-white/10 group-hover:border-[#00f5c4]/50 transition-all">
+                                                <img src={teacher.image_url} className="w-full h-full object-cover" onError={(e)=>{e.target.src='https://via.placeholder.com/150'}} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-xl font-bold text-white group-hover:text-[#00f5c4] transition-colors">{teacher.name}</h3>
+                                                <p className="text-sm text-gray-400">اضغط للدخول</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 3. الفصول */}
+                        {view === 'chapters' && selectedTeacher && (
+                            <div className="animate-in fade-in slide-in-from-right-8 duration-300">
+                                <div className="flex items-center gap-4 mb-8 bg-[#11141d] p-4 rounded-2xl border border-white/5">
+                                    <img src={selectedTeacher.image_url} className="w-16 h-16 rounded-full border-2 border-[#00f5c4]" />
+                                    <div>
+                                        <h2 className="text-xl font-bold text-white">{selectedTeacher.name}</h2>
+                                        <p className="text-gray-400 text-sm">اختر الفصل الدراسي</p>
+                                    </div>
+                                </div>
+                                <div className="space-y-4">
+                                    {selectedTeacher.chapters?.map((chapter, idx) => (
+                                        <div key={idx} onClick={() => { setSelectedChapter(chapter); setView('lectures'); }} className="card-glass p-5 rounded-2xl flex justify-between items-center cursor-pointer hover:bg-[#1a1f2e] transition-colors border-r-4 border-r-transparent hover:border-r-[#00f5c4]">
+                                            <div className="flex items-center gap-4">
+                                                <span className="text-2xl text-gray-600 font-black opacity-30">{(idx + 1).toString().padStart(2, '0')}</span>
+                                                <h3 className="text-lg font-bold">{chapter.chapter_name}</h3>
+                                            </div>
+                                            <div className="text-xs bg-[#00f5c4]/10 text-[#00f5c4] px-3 py-1 rounded-full">
+                                                {chapter.lectures?.length || 0} محاضرات
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 4. المحاضرات والفيديوهات */}
+                        {view === 'lectures' && selectedChapter && (
+                            <div className="animate-in fade-in slide-in-from-right-8 duration-300">
+                                <h2 className="text-2xl font-black mb-6 text-[#00f5c4]">{selectedChapter.chapter_name}</h2>
+                                <div className="space-y-8">
+                                    {selectedChapter.lectures?.map((lecture, lIdx) => (
+                                        <div key={lIdx} className="bg-[#11141d] rounded-3xl p-6 border border-white/5">
+                                            <h3 className="text-xl font-bold mb-4 flex items-center gap-2 border-b border-white/5 pb-3">
+                                                <i data-lucide="folder-open" width="20" className="text-[#ff9f43]"></i>
+                                                {lecture.lecture_name}
+                                            </h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                {lecture.videos?.map((video, vIdx) => (
+                                                    <div key={vIdx} className="group bg-black/40 p-3 rounded-xl hover:bg-white/5 transition-all cursor-pointer flex gap-4 items-center" 
+                                                         onClick={() => { setSelectedVideo(video); setView('player'); }}>
+                                                        <div className="w-24 h-16 bg-gray-900 rounded-lg relative overflow-hidden shrink-0 flex items-center justify-center">
+                                                            <div className="w-8 h-8 rounded-full bg-[#00f5c4]/20 flex items-center justify-center text-[#00f5c4] gro
