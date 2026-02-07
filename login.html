@@ -14,25 +14,14 @@
 
     <style>
         body { background-color: #030508; color: white; font-family: 'Cairo', sans-serif; }
-        
-        /* تصميم حقل الإدخال */
         .login-input-container {
-            background-color: #11141d;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: all 0.3s ease;
+            background-color: #11141d; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease;
         }
         .login-input-container:focus-within {
-            border-color: #00f5c4;
-            box-shadow: 0 0 20px rgba(0, 245, 196, 0.15);
-            background-color: #161b26;
+            border-color: #00f5c4; box-shadow: 0 0 20px rgba(0, 245, 196, 0.15); background-color: #161b26;
         }
-        
         .logo-text { direction: ltr; display: inline-flex; gap: 4px; }
-        
-        /* تأثير النيون للزر */
-        .neon-glow {
-            box-shadow: 0 0 25px rgba(0, 245, 196, 0.4);
-        }
+        .neon-glow { box-shadow: 0 0 25px rgba(0, 245, 196, 0.4); }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
@@ -40,28 +29,95 @@
 
     <div id="root"></div>
 
+    <script type="module">
+        // 1. استدعاء مكتبات Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+
+        // 2. إعدادات Firebase الخاصة بيك
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKY38XHjmC-iGqGrQio_YZ_i1iaIaE2Ds",
+            authDomain: "full-mark-8d434.firebaseapp.com",
+            projectId: "full-mark-8d434",
+            storageBucket: "full-mark-8d434.firebasestorage.app",
+            messagingSenderId: "802579483999",
+            appId: "1:802579483999:web:cf73136ffbd75d5e0ebaea",
+            measurementId: "G-26F9W89TB8"
+        };
+
+        // 3. تشغيل Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const analytics = getAnalytics(app);
+
+        // جعل دالة التحقق متاحة للرياكت (Global Function)
+        window.checkStudentCode = async (code) => {
+            try {
+                // بنبحث في مجموعة اسمها 'students' عن وثيقة فيها حقل 'code' بيساوي الكود المدخل
+                const q = query(collection(db, "students"), where("code", "==", code));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    // الكود صح وموجود
+                    return { success: true, data: querySnapshot.docs[0].data() };
+                } else {
+                    // الكود غلط
+                    return { success: false };
+                }
+            } catch (error) {
+                console.error("Error logging in: ", error);
+                return { success: false, error: error };
+            }
+        };
+    </script>
+
     <script type="text/babel">
         const { useState, useEffect } = React;
 
         function LoginPage() {
             useEffect(() => lucide.createIcons(), []);
 
-            const handleLogin = (e) => {
+            const [code, setCode] = useState("");
+            const [loading, setLoading] = useState(false);
+            const [errorMsg, setErrorMsg] = useState("");
+
+            const handleLogin = async (e) => {
                 e.preventDefault();
-                alert("جاري التحقق من الكود...");
-                // هنا منطق الدخول
+                setLoading(true);
+                setErrorMsg("");
+
+                // هنا بننادي على دالة Firebase اللي عملناها فوق
+                if (window.checkStudentCode) {
+                    const result = await window.checkStudentCode(code.trim());
+                    
+                    if (result.success) {
+                        // لو الكود صح:
+                        // 1. احفظ الكود في المتصفح عشان يفضل مسجل دخول
+                        localStorage.setItem('studentCode', code);
+                        localStorage.setItem('studentData', JSON.stringify(result.data));
+                        
+                        // 2. وديه للصفحة الرئيسية للمنصة (تأكد إن اسم الملف صح)
+                        alert(`أهلاً بيك يا ${result.data.name || 'بطل'}! جاري الدخول...`);
+                        window.location.href = 'platform.html'; // غير دي لاسم صفحة المنصة الداخلية بتاعتك
+                    } else {
+                        // لو الكود غلط
+                        setErrorMsg("الكود ده مش موجود أو غلط. اتأكد من الأدمن!");
+                    }
+                } else {
+                    setErrorMsg("مشكلة في الاتصال بالخادم.");
+                }
+                setLoading(false);
             };
 
             return (
                 <div className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
                     
-                    {/* خلفية بتأثيرات ضوئية */}
                     <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#00f5c4]/5 blur-[120px] rounded-full pointer-events-none"></div>
                     <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#00f5c4]/5 blur-[120px] rounded-full pointer-events-none"></div>
 
                     <div className="w-full max-w-md z-10">
                         
-                        {/* 1. اللوجو والعنوان */}
                         <div className="flex flex-col items-center mb-10">
                             <div className="flex items-center gap-3 mb-6">
                                 <h2 className="logo-text text-3xl font-black italic tracking-tighter text-white">
@@ -78,40 +134,37 @@
                             </p>
                         </div>
 
-                        {/* 2. فورم الدخول (كود فقط) */}
                         <form onSubmit={handleLogin} className="space-y-6">
                             
                             <div>
                                 <label className="block text-gray-400 text-sm mb-2 font-bold mr-1">كود الطالب</label>
-                                <div className="login-input-container rounded-2xl flex items-center px-4 py-4">
-                                    <i data-lucide="key" className="text-gray-500 shrink-0 ml-2" width="22"></i>
+                                <div className={`login-input-container rounded-2xl flex items-center px-4 py-4 ${errorMsg ? 'border-red-500 bg-red-500/5' : ''}`}>
+                                    <i data-lucide="key" className={`shrink-0 ml-2 ${errorMsg ? 'text-red-500' : 'text-gray-500'}`} width="22"></i>
                                     <input 
                                         type="text" 
                                         placeholder="اكتب كود التفعيل هنا..."
                                         className="bg-transparent border-none outline-none text-white w-full placeholder-gray-600 font-bold text-lg tracking-wide"
+                                        value={code}
+                                        onChange={(e) => setCode(e.target.value)}
                                         required
                                     />
                                 </div>
+                                {errorMsg && <p className="text-red-500 text-sm mt-2 font-bold flex items-center gap-1"><i data-lucide="alert-circle" width="14"></i> {errorMsg}</p>}
                             </div>
 
-                            {/* زر الدخول */}
                             <button 
                                 type="submit"
-                                className="w-full bg-[#00f5c4] text-[#030508] font-black text-xl py-4 rounded-2xl hover:bg-[#00dbae] transition-all transform hover:scale-[1.02] active:scale-[0.98] neon-glow flex justify-center items-center gap-2"
+                                disabled={loading}
+                                className={`w-full bg-[#00f5c4] text-[#030508] font-black text-xl py-4 rounded-2xl hover:bg-[#00dbae] transition-all transform hover:scale-[1.02] active:scale-[0.98] neon-glow flex justify-center items-center gap-2 ${loading ? 'opacity-70 cursor-wait' : ''}`}
                             >
-                                دخول للمنصة <i data-lucide="arrow-left" width="24" strokeWidth="3"></i>
+                                {loading ? 'جاري التحقق...' : 'دخول للمنصة'} 
+                                {!loading && <i data-lucide="arrow-left" width="24" strokeWidth="3"></i>}
                             </button>
 
                         </form>
 
-                        {/* 3. رابط الاشتراك المجاني (تليجرام الأدمن) */}
                         <div className="mt-10 text-center flex flex-col md:flex-row items-center justify-center gap-2 text-lg">
-                            {/* الجزء الأبيض الثابت */}
-                            <span className="text-white font-medium">
-                                لسه معكش كود؟
-                            </span>
-                            
-                            {/* الجزء الملون القابل للضغط */}
+                            <span className="text-white font-medium">لسه معكش كود؟</span>
                             <a 
                                 href="https://t.me/elgizawy9" 
                                 target="_blank"
@@ -124,10 +177,7 @@
 
                     </div>
                     
-                    {/* حقوق الملكية */}
-                    <div className="absolute bottom-6 text-gray-600 text-xs">
-                        Developed with ❤️ by ELGIZAWY
-                    </div>
+                    <div className="absolute bottom-6 text-gray-600 text-xs">Developed with ❤️ by ELGIZAWY</div>
                 </div>
             );
         }
