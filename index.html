@@ -6,229 +6,199 @@ import {
   Zap, Monitor, RefreshCw, Send, Star, LogIn 
 } from 'lucide-react';
 
-// هذا المكون هو صفحة الترحيب فقط
-// onStart: هي الدالة التي ستنقل المستخدم لصفحة تسجيل الدخول عند الضغط على الأزرار
 export default function LandingPage({ onStart }) {
-  
   return (
-    <div 
-      className="min-h-screen text-white font-['Cairo'] overflow-x-hidden"
-      dir="rtl"
-      // ضمان اللون الأسود التلجي حتى لو فيه مشكلة في التيلويند
-      style={{ backgroundColor: '#030508', color: '#ffffff' }}
-    >
-      
-      {/* === Navbar === */}
-      <nav 
-        className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto border-b border-white/5 sticky top-0 z-50 backdrop-blur-md"
-        style={{ backgroundColor: 'rgba(3, 5, 8, 0.9)' }}
-      >
-        <h2 className="text-2xl font-black italic tracking-tighter text-white flex items-center gap-2">
-          FULL <span className="text-[#00f5c4]">MARK</span>
-        </h2>
-        <a
-          href="https://t.me/elgizawy9"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-[#00f5c4] text-[#030508] px-4 py-2 rounded-full font-bold hover:bg-[#00dbae] transition-all flex items-center gap-2 text-sm"
-        >
-          <Send size={16} /> قناة التليجرام
-        </a>
-      </nav>
+    <div dir="rtl" className="font-sans antialiased">
+      {/* --- الحل السحري: استدعاء التنسيقات أوتوماتيك --- */}
+      {/* هذا السطر هيشغل التصميم والألوان فوراً حتى لو مش مسطب Tailwind */}
+      <script src="https://cdn.tailwindcss.com"></script>
+      <style>{`
+        body { background-color: #030508; color: white; margin: 0; }
+        .icy-bg { background-color: #030508; }
+        .card-bg { background-color: #11141d; }
+        .accent-text { color: #00f5c4; }
+        .btn-primary { background-color: #00f5c4; color: #030508; }
+      `}</style>
 
-      {/* === 1. Hero Section (الإحصائيات والصورة) === */}
-      <header className="relative pt-8 pb-10 px-6">
-        <div className="max-w-7xl mx-auto">
-          
-          {/* كروت الإحصائيات (مثل الصورة الأولى) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-            <div className="p-6 rounded-2xl border border-white/5 text-center shadow-lg" style={{ backgroundColor: '#11141d' }}>
-              <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
-                <Play fill="#ff9f43" size={20} /> 1 مليون+
+      {/* === بداية الصفحة === */}
+      <div className="min-h-screen bg-[#030508] text-white overflow-x-hidden font-['Cairo']">
+        
+        {/* Navbar */}
+        <nav className="flex justify-between items-center px-4 md:px-6 py-4 max-w-7xl mx-auto border-b border-white/5 sticky top-0 z-50 backdrop-blur-md bg-[#030508]/90">
+          <h2 className="text-2xl font-black italic tracking-tighter text-white flex items-center gap-2">
+            FULL <span className="text-[#00f5c4]">MARK</span>
+          </h2>
+          <a
+            href="https://t.me/elgizawy9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#00f5c4] text-[#030508] px-4 py-2 rounded-full font-bold hover:bg-[#00dbae] transition-all flex items-center gap-2 text-sm"
+          >
+            <Send size={16} /> قناة التليجرام
+          </a>
+        </nav>
+
+        {/* === 1. Hero Section === */}
+        <header className="relative pt-8 pb-10 px-4 md:px-6">
+          <div className="max-w-7xl mx-auto">
+            
+            {/* إحصائيات علوية */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+              <div className="bg-[#11141d] p-6 rounded-2xl border border-white/5 text-center shadow-lg">
+                <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
+                  <Play fill="#ff9f43" size={20} /> 1 مليون+
+                </div>
+                <p className="text-gray-400 text-sm">مشاهدات لشرح روش</p>
               </div>
-              <p className="text-gray-400 text-sm">مشاهدات لشرح روش</p>
+              <div className="bg-[#11141d] p-6 rounded-2xl border border-white/5 text-center shadow-lg">
+                <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
+                  <MessageCircle fill="#ff9f43" size={20} /> %98
+                </div>
+                <p className="text-gray-400 text-sm">بيقولوا ارتحنا نفسياً</p>
+              </div>
+              <div className="bg-[#11141d] p-6 rounded-2xl border border-white/5 text-center shadow-lg">
+                <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
+                  <Clock size={24} /> 24/7
+                </div>
+                <p className="text-gray-400 text-sm">دعم صاحبك شغال</p>
+              </div>
+            </div>
+
+            {/* المحتوى الرئيسي */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+               {/* الصورة */}
+               <div className="order-1 lg:order-2 relative flex justify-center">
+                  <div className="absolute inset-0 bg-[#00f5c4]/20 blur-[80px] rounded-full"></div>
+                  <img 
+                    src="https://i.postimg.cc/2ys9RdV5/IMG-20260207-221213-980.jpg" 
+                    alt="Full Mark Interface" 
+                    className="relative z-10 w-full max-w-md rounded-[2.5rem] border-4 border-[#00f5c4]/20 shadow-2xl shadow-[#00f5c4]/10 object-cover transform hover:scale-105 transition-transform duration-500"
+                  />
+               </div>
+
+               {/* النص */}
+               <div className="text-right order-2 lg:order-1 space-y-6">
+                  <h1 className="text-4xl md:text-6xl font-black leading-tight">
+                    حلم الكلية اللي في <br/>
+                    دماغك <br/>
+                    يبتدي <span className="text-[#00f5c4]">Full Mark</span>
+                  </h1>
+                  <p className="text-xl text-gray-300 font-bold">
+                    بنخلي المنهج صاحبك الجدع! (وببلاش)
+                  </p>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                    <button 
+                      onClick={onStart}
+                      className="flex-1 px-8 py-4 rounded-2xl bg-[#00f5c4] text-[#030508] font-black text-lg hover:shadow-[0_0_20px_rgba(0,245,196,0.4)] transition-all flex items-center justify-center gap-2"
+                    >
+                      <LogIn size={24} /> تسجيل الدخول
+                    </button>
+                    <a href="#features" className="flex-1 px-8 py-4 rounded-2xl border border-white/20 text-white font-bold hover:bg-white/5 transition-all text-center flex items-center justify-center">
+                      شوف اللي مستنيك 👇
+                    </a>
+                  </div>
+               </div>
+            </div>
+          </div>
+        </header>
+
+        {/* === 2. Features Section === */}
+        <section id="features" className="py-16 px-4 md:px-6 bg-[#0a0d14]">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12 space-y-4">
+              <p className="text-[#ff9f43] font-bold">ليه تلزق معانا؟</p>
+              <h2 className="text-3xl md:text-5xl font-black text-white">
+                كل اللي تحتاجه عشان تبقى <br/>
+                <span className="text-[#ff9f43] relative inline-block mt-2">
+                   مطمن ومبسوط
+                </span>
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto mt-4">
+                من أول فيديو للشرح لحد ليلة الامتحان، فريق Full Mark ماسك إيدك بخفة دم وبساطة.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FeatureCard icon={<Activity size={28} />} title="تدريبات تفاعلية" desc="بنوك أسئلة متدرجة المستويات تخليك تشوف نفسك بتعلى خطوة بخطوة وتتخانق مع الغلط." />
+              <FeatureCard icon={<Calendar size={28} />} title="خطة مذاكرة مرنة" desc="جداول أسبوعية جاهزة تظبط بين المدرسة والقعدة مع صحابك من غير ما تحس بذنب." />
+              <FeatureCard icon={<CheckCircle size={28} />} title="اختبارات شاملة" desc="امتحانات شبه الحقيقة بابل شيت وتصحيح فوري وتحليل يقولك فين العك." />
+              <FeatureCard icon={<Smile size={28} />} title="مجتمع مرح" desc="شاتات ومسابقات يومية تخليك بتذاكر مع صحبة دايما مولعة الحماس." />
+            </div>
+          </div>
+        </section>
+
+        {/* === 3. Free Pricing Section === */}
+        <section className="py-20 px-4 md:px-6 relative overflow-hidden">
+          <div className="max-w-7xl mx-auto relative z-10 text-center">
+            
+            <div className="mb-16">
+              <p className="text-[#ff9f43] font-bold mb-2">مصاريف الدروس؟ سيبها علينا</p>
+              <h2 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+                كل المدرسين في جيبك <br/>
+                <span className="text-[#00f5c4] bg-white/5 px-4 rounded-xl mt-2 inline-block">مجاناً بالكامل</span>
+              </h2>
+              <p className="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed">
+                عارف إنك لسه داخل تالتة ثانوي ومصدوم من الأسعار؟ لو حسبتها تلاقي نفسك بتكسر الـ 3000 جنيه شهرياً.
+                <br/>
+                عشان كده <span className="text-[#00f5c4] font-bold">Full Mark</span> وفرتلك كل المواد ببلاش!
+              </p>
+            </div>
+
+            {/* مميزات الاشتراك */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto text-right mb-16">
+              <ValueCard icon={<FileText size={24} />} title="المحاضرة + PDF + امتحان" desc="كل حصة بتنزل مع ملفها وواجب او كويز عشان تظبط المعلومة." />
+              <ValueCard icon={<Zap size={24} />} title="متأخرش عنك" desc="المحتوى بينزل خلال 24 ساعة من المنصة." />
+              <ValueCard icon={<Monitor size={24} />} title="جودة منصة" desc="نفس جودة الفيديوهات الرسمية مع تحكم في السرعة." />
+              <ValueCard icon={<RefreshCw size={24} />} title="تحديث مستمر" desc="بنضيف ونغير مدرسين عشان دايما يبقى عندك الأحسن." />
+            </div>
+
+            {/* CTA Card - الاشتراك المجاني */}
+            <div className="bg-[#11141d] p-8 rounded-3xl border border-white/10 max-w-lg mx-auto relative overflow-hidden group hover:border-[#00f5c4]/40 transition-all">
+               <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-[#00f5c4] to-transparent"></div>
+               
+               <div className="flex justify-between items-center mb-6">
+                  <span className="bg-[#ff9f43]/20 text-[#ff9f43] px-3 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
+                    <Star size={14} fill="#ff9f43"/> العرض الأقوى
+                  </span>
+                  <span className="text-gray-400 text-sm">حساب طالب</span>
+               </div>
+
+               <div className="text-center mb-8">
+                 <h3 className="text-6xl font-black text-white mb-2">0 <span className="text-2xl font-bold text-gray-400">ج.م</span></h3>
+                 <p className="text-[#00f5c4] font-bold text-xl">مجـــــانـــاً 100%</p>
+                 <p className="text-gray-400 mt-2">شامل كل المواد (علمي وأدبي) والمراجعات</p>
+               </div>
+
+               <button 
+                  onClick={onStart}
+                  className="w-full py-4 rounded-xl bg-[#ff3e3e] text-white font-black text-xl hover:bg-[#ff2222] transition-colors shadow-[0_0_20px_rgba(255,62,62,0.3)] animate-pulse"
+                >
+                  ادخل ذاكر دلوقتي 🚀
+                </button>
+                <p className="text-xs text-gray-500 mt-4">اضغط هنا للانتقال لصفحة تسجيل الدخول</p>
             </div>
             
-            <div className="p-6 rounded-2xl border border-white/5 text-center shadow-lg" style={{ backgroundColor: '#11141d' }}>
-              <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
-                <MessageCircle fill="#ff9f43" size={20} /> %98
-              </div>
-              <p className="text-gray-400 text-sm">بيقولوا ارتحنا نفسياً</p>
-            </div>
-
-            <div className="p-6 rounded-2xl border border-white/5 text-center shadow-lg" style={{ backgroundColor: '#11141d' }}>
-              <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
-                <Clock size={24} /> 24/7
-              </div>
-              <p className="text-gray-400 text-sm">دعم صاحبك شغال</p>
+            <div className="mt-12 text-gray-500 text-sm">
+              للتواصل مع المطور: <a href="https://t.me/elgizawy9" target="_blank" className="text-[#00f5c4] underline">@elgizawy9</a>
             </div>
           </div>
+        </section>
 
-          {/* الصورة الرئيسية والنص */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-             
-             {/* الصورة (يسار في الشاشات الكبيرة) */}
-             <div className="order-1 lg:order-2 relative flex justify-center">
-                <div className="absolute inset-0 bg-[#00f5c4]/20 blur-[80px] rounded-full"></div>
-                <img 
-                  src="https://i.postimg.cc/2ys9RdV5/IMG-20260207-221213-980.jpg" 
-                  alt="Full Mark Interface" 
-                  className="relative z-10 w-full max-w-md rounded-[2.5rem] border-4 border-[#00f5c4]/20 shadow-2xl shadow-[#00f5c4]/10 object-cover transform hover:scale-105 transition-transform duration-500"
-                />
-             </div>
-
-             {/* النص (يمين) */}
-             <div className="text-right order-2 lg:order-1 space-y-6">
-                <h1 className="text-4xl md:text-6xl font-black leading-tight">
-                  حلم الكلية اللي في <br/>
-                  دماغك <br/>
-                  يبتدي <span className="text-[#00f5c4] relative">
-                    Full Mark
-                  </span>
-                </h1>
-                <p className="text-xl text-gray-300 font-bold">
-                  بنخلي المنهج صاحبك الجدع! (وببلاش)
-                </p>
-                
-                <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                  <button 
-                    onClick={onStart}
-                    className="flex-1 px-8 py-4 rounded-2xl bg-[#00f5c4] text-[#030508] font-black text-lg hover:shadow-[0_0_20px_rgba(0,245,196,0.4)] transition-all flex items-center justify-center gap-2"
-                  >
-                    <LogIn size={24} /> تسجيل الدخول الآن
-                  </button>
-                  <button className="flex-1 px-8 py-4 rounded-2xl border border-white/20 text-white font-bold hover:bg-white/5 transition-all">
-                    شوف اللي مستنيك 👇
-                  </button>
-                </div>
-             </div>
-          </div>
-        </div>
-      </header>
-
-      {/* === 2. Features Section (مميزات المنصة) === */}
-      <section className="py-16 px-6" style={{ backgroundColor: '#0a0d14' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 space-y-4">
-            <p className="text-[#ff9f43] font-bold">ليه تلزق معانا؟</p>
-            <h2 className="text-3xl md:text-5xl font-black text-white">
-              كل اللي تحتاجه عشان تبقى <br/>
-              <span className="text-[#ff9f43] relative inline-block mt-2">
-                 مطمن ومبسوط
-              </span>
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto mt-4">
-              من أول فيديو للشرح لحد ليلة الامتحان، فريق Full Mark ماسك إيدك بخفة دم وبساطة.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FeatureCard 
-              icon={<Activity size={28} />} 
-              title="تدريبات تفاعلية" 
-              desc="بنوك أسئلة متدرجة المستويات تخليك تشوف نفسك بتعلى خطوة بخطوة وتتخانق مع الغلط."
-            />
-            <FeatureCard 
-              icon={<Calendar size={28} />} 
-              title="خطة مذاكرة مرنة" 
-              desc="جداول أسبوعية جاهزة تظبط بين المدرسة والقعدة مع صحابك من غير ما تحس بذنب."
-            />
-            <FeatureCard 
-              icon={<CheckCircle size={28} />} 
-              title="اختبارات شاملة" 
-              desc="امتحانات شبه الحقيقة بابل شيت وتصحيح فوري وتحليل يقولك فين العك."
-            />
-            <FeatureCard 
-              icon={<Smile size={28} />} 
-              title="مجتمع مرح" 
-              desc="شاتات ومسابقات يومية تخليك بتذاكر مع صحبة دايما مولعة الحماس."
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* === 3. Value & Free Pricing (قسم المجانية) === */}
-      <section className="py-20 px-6 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto relative z-10 text-center">
-          
-          <div className="mb-16">
-            <p className="text-[#ff9f43] font-bold mb-2">مصاريف الدروس؟ سيبها علينا</p>
-            <h2 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
-              كل المدرسين في جيبك <br/>
-              <span className="text-[#00f5c4] bg-white/5 px-4 rounded-xl mt-2 inline-block">مجاناً بالكامل</span>
-            </h2>
-            <p className="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed">
-              عارف إنك لسه داخل تالتة ثانوي ومصدوم من الأسعار؟ لو حسبتها تلاقي نفسك بتكسر الـ 3000 جنيه شهرياً غير المواصلات.
-              <br/><br/>
-              عشان كده عملنالك <span className="text-[#00f5c4] font-bold">Full Mark</span>: تجمعنا فيه كل الأسامي التقيلة من أول عربي ولغات لحد المواد العلمية والأدبية، بالفيديوهات، الملازم، الكويزات.. وكل ده ببلاش!
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto text-right mb-16">
-            <ValueCard icon={<FileText size={24} />} title="المحاضرة + PDF + امتحان" desc="كل حصة بتنزل مع ملفها وواجب او كويز عشان تظبط المعلومة في دماغك." />
-            <ValueCard icon={<Zap size={24} />} title="متأخرش عنك" desc="المحتوى بينزل خلال 24 ساعة من المنصة، ولو جاهز بينزل في نفس اليوم." />
-            <ValueCard icon={<Monitor size={24} />} title="جودة منصة" desc="نفس جودة الفيديوهات الرسمية مع تحكم في السرعة واختيار الدقة اللي تناسب باقتك." />
-            <ValueCard icon={<RefreshCw size={24} />} title="تحديث مستمر" desc="ممكن نضيف او نغير مدرسين طول الترم عشان دايما يبقى عندك احسن شرح." />
-          </div>
-
-          {/* === CTA Card (كارت الاشتراك المجاني) === */}
-          <div className="p-8 rounded-3xl border border-white/10 max-w-lg mx-auto relative overflow-hidden" style={{ backgroundColor: '#11141d' }}>
-             {/* تأثير إضاءة علوية */}
-             <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-[#00f5c4] to-transparent"></div>
-             
-             <div className="flex justify-between items-center mb-6">
-                <span className="bg-[#ff9f43]/20 text-[#ff9f43] px-3 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
-                  <Star size={14} fill="#ff9f43"/> الأكثر طلباً
-                </span>
-                <span className="text-gray-400 text-sm">حساب مجاني</span>
-             </div>
-
-             <div className="text-center mb-8">
-               <h3 className="text-6xl font-black text-white mb-2">0 <span className="text-2xl font-bold text-gray-400">ج.م</span></h3>
-               <p className="text-[#00f5c4] font-bold text-xl">مجـــــانـــاً</p>
-               <p className="text-gray-400 mt-2">لأي شعبة سواء علوم أو رياضة أو أدبي، شامل كل المواد.</p>
-             </div>
-
-             <div className="space-y-4 mb-8">
-               <div className="flex items-center gap-3 text-right bg-white/5 p-3 rounded-lg">
-                 <CheckCircle className="text-[#00f5c4] shrink-0" size={20} />
-                 <span className="text-sm">وفر فلوس الدروس (أكتر من 1200ج شهرياً)</span>
-               </div>
-               <div className="flex items-center gap-3 text-right bg-white/5 p-3 rounded-lg">
-                 <CheckCircle className="text-[#00f5c4] shrink-0" size={20} />
-                 <span className="text-sm">ذاكر براحتك، معاك دعم 24/7</span>
-               </div>
-             </div>
-
-             <button 
-                onClick={onStart}
-                className="w-full py-4 rounded-xl bg-[#ff3e3e] text-white font-black text-xl hover:bg-[#ff2222] transition-colors shadow-[0_0_20px_rgba(255,62,62,0.3)] animate-pulse"
-              >
-                ادخل لصفحة تسجيل الدخول 🚀
-              </button>
-          </div>
-          
-          <div className="mt-8 text-gray-500 text-sm">
-            للتواصل مع المطور: <a href="https://t.me/elgizawy9" className="text-[#00f5c4] underline">@elgizawy9</a>
-          </div>
-
-        </div>
-      </section>
-
-      {/* === Footer === */}
-      <footer className="py-8 border-t border-white/5 text-center text-gray-600 text-sm" style={{ backgroundColor: '#0a0d14' }}>
-        <p>Developed with ❤️ by <a href="https://t.me/elgizawy9" className="hover:text-[#00f5c4]">ELGIZAWY</a> © 2024</p>
-      </footer>
+        {/* Footer */}
+        <footer className="py-8 border-t border-white/5 text-center text-gray-600 text-sm bg-[#0a0d14]">
+          <p>Developed with ❤️ by <a href="https://t.me/elgizawy9" className="hover:text-[#00f5c4]">ELGIZAWY</a> © 2024</p>
+        </footer>
+      </div>
     </div>
   );
 }
 
-// === مكونات فرعية للكروت لتقليل تكرار الكود ===
-
+// === مكونات فرعية ===
 function FeatureCard({ icon, title, desc }) {
   return (
-    <div className="p-8 rounded-[2rem] border border-white/5 text-right relative overflow-hidden group hover:border-[#00f5c4]/30 transition-all" style={{ backgroundColor: '#11141d' }}>
-       <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-[#00f5c4] group-hover:text-black transition-colors" style={{ backgroundColor: '#1a1f2e' }}>
+    <div className="bg-[#11141d] p-8 rounded-[2rem] border border-white/5 text-right relative overflow-hidden group hover:border-[#00f5c4]/30 transition-all">
+       <div className="w-14 h-14 bg-[#1a1f2e] rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-[#00f5c4] group-hover:text-black transition-colors">
          {icon}
        </div>
        <h3 className="text-2xl font-bold text-white mb-3">{title}</h3>
@@ -239,7 +209,7 @@ function FeatureCard({ icon, title, desc }) {
 
 function ValueCard({ icon, title, desc }) {
   return (
-    <div className="flex gap-4 p-6 rounded-2xl border border-white/5" style={{ backgroundColor: '#11141d' }}>
+    <div className="flex gap-4 bg-[#11141d] p-6 rounded-2xl border border-white/5">
       <div className="shrink-0 w-12 h-12 bg-[#ff9f43]/10 rounded-xl flex items-center justify-center text-[#ff9f43]">
         {icon}
       </div>
@@ -250,3 +220,4 @@ function ValueCard({ icon, title, desc }) {
     </div>
   );
 }
+                
