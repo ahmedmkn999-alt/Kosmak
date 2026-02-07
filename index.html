@@ -3,263 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Full Mark - منصة تعليمية مجانية</title>
+    <title>Full Mark - المنصة التعليمية</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
     <style>
-        body { background-color: #030508; color: white; font-family: 'Cairo', sans-serif; }
-        .glass-nav { background-color: rgba(3, 5, 8, 0.95); backdrop-filter: blur(10px); }
-        .card-bg { background-color: #11141d; }
-        /* تصحيح اتجاه اللوجو الانجليزي */
+        /* الألوان والخطوط */
+        body { background-color: #030508; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        /* تأثيرات الكروت */
+        .glass-panel {
+            background: rgba(17, 20, 29, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-panel:hover {
+            border-color: rgba(0, 245, 196, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(0, 245, 196, 0.1);
+        }
+        
+        /* حقول الإدخال */
+        .login-input {
+            background-color: #11141d;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        .login-input:focus-within {
+            border-color: #00f5c4;
+            box-shadow: 0 0 15px rgba(0, 245, 196, 0.2);
+        }
+        
         .logo-text { direction: ltr; display: inline-flex; gap: 4px; }
+        .text-neon { color: #00f5c4; text-shadow: 0 0 10px rgba(0, 245, 196, 0.3); }
+        .bg-neon { background-color: #00f5c4; color: #030508; }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
 
-        function LandingPage() {
-            
-            // تفعيل الايقونات بعد التحميل
+        // ==========================================
+        // 1. البيانات (مأخوذة من ملفك data.json)
+        // ==========================================
+        const FULL_DATA = [
+            {
+                "subject_id": 43,
+                "subject_name": "كيمياء",
+                "image_url": "https://img.freepik.com/free-vector/chemistry-logo-template-illustration-free-vector.jpg",
+                "teachers": [
+                    {
+                        "id": 124,
+                        "name": "أ. محمد عبدالجواد",
+                        "image_url": "https://files.coursatk.online/images/questions/23b4ebea27532d1d05b2f7de5f26e63add3e4ca8ffcd.jpg",
+                        "chapters": [
+                            {
+                                "chapter_id": 569,
+                                "chapter_name": "الأساسيات",
+                                "lectures": [
+                                    {
+                                        "lecture_id": 3543,
+                                        "lecture_name": "التأسيس",
+                                        "videos": [
+                                            {
+                                                "video_id": 13292,
+                                                "video_name": "التوزيع الإلكترونى و خواص الجدول الدورى 📅",
+                                                "links": [{ "url": "https://river-5-550.rtbcdn.ru/hls-vod/ejbNjBGoqeRs0IRSTjayGw/1770620541/2209/0x5000c5007446bb38/ad835cf61651459a88ab3f5307811fab.mp4.m3u8" }]
+                                            },
+                                            {
+                                                "video_id": 15464,
+                                                "video_name": "واجب الحركة الوطنية في عهد الاحتلال البريطاني",
+                                                "links": [{ "url": "https://river-3-346.rtbcdn.ru/hls-vod/Cm7fB4sRcABRCP_daLi-3A/1770811659/2626/0x5000039ce868e589/6472f4d2e7814b5381dd3885f48335df.mp4.m3u8" }]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // ==========================================
+        // 2. مكون مشغل الفيديو (HLS Player)
+        // ==========================================
+        const VideoPlayer = ({ src, onBack }) => {
+            const videoRef = useRef(null);
+
             useEffect(() => {
-                lucide.createIcons();
-            }, []);
+                const video = videoRef.current;
+                if (!video) return;
 
-            // === التعديل هنا: الدالة دي هي اللي بتنقل لصفحة الدخول ===
-            const handleStart = () => {
-                window.location.href = 'login.html';
-            };
+                if (Hls.isSupported() && src && src.includes('.m3u8')) {
+                    const hls = new Hls();
+                    hls.loadSource(src);
+                    hls.attachMedia(video);
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = src;
+                } else {
+                    video.src = src;
+                }
+            }, [src]);
 
             return (
-                <div className="min-h-screen overflow-x-hidden">
-                    
-                    {/* === Navbar === */}
-                    <nav className="flex justify-between items-center px-4 py-3 max-w-7xl mx-auto border-b border-white/5 sticky top-0 z-50 glass-nav">
-                        
-                        {/* اللوجو + صورة المنصة */}
-                        <div className="flex items-center gap-3 shrink-0 ml-4">
-                            <img 
-                                src="https://i.postimg.cc/2ys9RdV5/IMG-20260207-221213-980.jpg" 
-                                alt="Full Mark Logo" 
-                                className="w-10 h-10 rounded-lg border border-white/20 object-cover shadow-lg shadow-[#00f5c4]/10"
-                            />
-                            <h2 className="logo-text text-xl font-black italic tracking-tighter text-white">
-                                FULL <span className="text-[#00f5c4]">MARK</span>
-                            </h2>
-                        </div>
+                <div className="fixed inset-0 z-[60] bg-black flex flex-col items-center justify-center animate-in fade-in duration-300">
+                    <button onClick={onBack} className="absolute top-6 right-6 z-50 bg-white/10 p-3 rounded-full text-white hover:bg-neon transition-colors">
+                        <i data-lucide="x" width="24"></i>
+                    </button>
+                    <div className="w-full max-w-5xl aspect-video bg-black rounded-xl overflow-hidden shadow-2xl shadow-[#00f5c4]/10">
+                        <video ref={videoRef} className="w-full h-full" controls autoPlay playsInline></video>
+                    </div>
+                </div>
+            );
+        };
 
-                        {/* أزرار التواصل */}
-                        <div className="flex gap-2 shrink-0">
-                            <a
-                                href="https://t.me/elgizawy9"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-white/10 border border-white/10 text-white px-3 py-1.5 rounded-full font-bold hover:bg-white/20 transition-all flex items-center gap-1 text-xs md:text-sm"
-                            >
-                                <i data-lucide="user" width="14"></i> <span className="hidden md:inline">تواصل مع</span> الأدمن
-                            </a>
-                            <a
-                                href="https://t.me/fulll_mark" 
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="bg-[#00f5c4] text-[#030508] px-3 py-1.5 rounded-full font-bold hover:bg-[#00dbae] transition-all flex items-center gap-1 text-xs md:text-sm"
-                            >
-                                <i data-lucide="send" width="14"></i> <span className="hidden md:inline">قناة</span> التليجرام
-                            </a>
+        // ==========================================
+        // 3. التطبيق الرئيسي (يشمل الدخول والمنصة)
+        // ==========================================
+        function App() {
+            // حالة التطبيق: 'login' أو 'platform'
+            const [currentScreen, setCurrentScreen] = useState('login');
+            const [code, setCode] = useState('');
+            
+            // حالة المنصة الداخلية
+            const [view, setView] = useState('subjects'); 
+            const [selectedSubject, setSelectedSubject] = useState(null);
+            const [selectedTeacher, setSelectedTeacher] = useState(null);
+            const [selectedChapter, setSelectedChapter] = useState(null);
+            const [selectedVideo, setSelectedVideo] = useState(null);
+
+            useEffect(() => { lucide.createIcons(); }, [currentScreen, view]);
+
+            // دالة تسجيل الدخول
+            const handleLogin = (e) => {
+                e.preventDefault();
+                if(code.trim().length > 0) {
+                    setCurrentScreen('platform'); // الانتقال للمنصة مباشرة
+                } else {
+                    alert("اكتب أي كود عشان تجرب!");
+                }
+            };
+
+            // دالة الرجوع للخلف في المنصة
+            const goBack = () => {
+                if (view === 'player') setView('lectures');
+                else if (view === 'lectures') setView('chapters');
+                else if (view === 'chapters') setView('teachers');
+                else if (view === 'teachers') setView('subjects');
+            };
+
+            // ------------------------------------------
+            // شاشة تسجيل الدخول (Login Screen)
+            // ------------------------------------------
+            if (currentScreen === 'login') {
+                return (
+                    <div className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
+                        {/* خلفية */}
+                        <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-[#00f5c4]/5 blur-[150px] rounded-full"></div>
+                        
+                        <div className="w-full max-w-md z-10 animate-in fade-in zoom-in duration-500">
+                            {/* اللوجو */}
+                            <div className="flex flex-col items-center mb-10">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <h2 className="logo-text text-4xl font-black italic tracking-tighter text-white">
+                                        FULL <span className="text-neon">MARK</span>
+                                    </h2>
+                                </div>
+                                <h1 className="text-3xl font-black mb-2">أهلاً يا بطل! 👋</h1>
+                                <p className="text-gray-400">سجل دخولك عشان تبدأ المذاكرة <span className="text-neon">مجاناً</span></p>
+                            </div>
+
+                            {/* الفورم */}
+                            <form onSubmit={handleLogin} className="space-y-6">
+                                <div>
+                                    <label className="block text-gray-400 text-sm mb-2 font-bold">كود الطالب</label>
+                                    <div className="login-input rounded-2xl flex items-center px-4 py-4">
+                                        <i data-lucide="key" className="text-gray-500 shrink-0 ml-2"></i>
+                                        <input 
+                                            type="text" 
+                                            placeholder="اكتب الكود هنا..."
+                                            className="bg-transparent border-none outline-none text-white w-full font-bold text-lg tracking-widest"
+                                            value={code}
+                                            onChange={(e) => setCode(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                                <button type="submit" className="w-full bg-neon font-black text-xl py-4 rounded-2xl hover:shadow-[0_0_20px_rgba(0,245,196,0.4)] transition-all flex justify-center items-center gap-2">
+                                    دخول للمنصة <i data-lucide="arrow-left" width="24"></i>
+                                </button>
+                            </form>
+
+                            {/* فوتر */}
+                            <div className="mt-8 text-center">
+                                <a href="https://t.me/elgizawy9" target="_blank" className="text-[#ff9f43] font-bold hover:underline">
+                                    لسه معكش كود؟ اشترك مجاني دلوقتي 
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            // ------------------------------------------
+            // شاشة المنصة (Platform Screen)
+            // ------------------------------------------
+            return (
+                <div className="min-h-screen pb-20">
+                    
+                    {/* Navbar */}
+                    <nav className="sticky top-0 z-40 border-b border-white/5 bg-[#030508]/90 backdrop-blur-md px-4 py-3">
+                        <div className="max-w-7xl mx-auto flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                                <h2 className="logo-text text-xl font-black italic text-white">
+                                    FULL <span className="text-neon">MARK</span>
+                                </h2>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                {view !== 'subjects' && (
+                                    <button onClick={goBack} className="text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-all flex gap-1 items-center">
+                                        <i data-lucide="arrow-right" width="16"></i> رجوع
+                                    </button>
+                                )}
+                                <div className="bg-[#11141d] px-3 py-1 rounded-full border border-white/5 text-xs font-bold text-neon">
+                                    {code}
+                                </div>
+                            </div>
                         </div>
                     </nav>
 
-                    {/* === 1. Hero Section === */}
-                    <header className="relative pt-8 pb-10 px-4 md:px-6">
-                        <div className="max-w-7xl mx-auto">
-                            
-                            {/* Stats Cards */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-                                <div className="card-bg p-6 rounded-2xl border border-white/5 text-center shadow-lg">
-                                    <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
-                                        <i data-lucide="play-circle" color="#ff9f43"></i> 1 مليون+
+                    <div className="max-w-7xl mx-auto px-4 pt-6">
+                        
+                        {/* 1. المواد (Subjects) */}
+                        {view === 'subjects' && (
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-in fade-in">
+                                {FULL_DATA.map((sub, i) => (
+                                    <div key={i} onClick={() => { setSelectedSubject(sub); setView('teachers'); }} 
+                                         className="glass-panel p-4 rounded-2xl cursor-pointer text-center group">
+                                        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center overflow-hidden border-2 border-transparent group-hover:border-[#00f5c4] transition-all">
+                                            <img src={sub.image_url} className="w-full h-full object-cover" onError={(e)=>{e.target.style.display='none'}} />
+                                            <i data-lucide="book" className="absolute text-gray-600"></i>
+                                        </div>
+                                        <h3 className="font-bold text-lg">{sub.subject_name}</h3>
+                                        <p className="text-xs text-gray-500 mt-1">{sub.teachers.length} مدرسين</p>
                                     </div>
-                                    <p className="text-gray-400 text-sm">مشاهدات لشرح روش</p>
-                                </div>
-                                <div className="card-bg p-6 rounded-2xl border border-white/5 text-center shadow-lg">
-                                    <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
-                                        <i data-lucide="message-circle" color="#ff9f43"></i> %98
-                                    </div>
-                                    <p className="text-gray-400 text-sm">بيقولوا ارتحنا نفسياً</p>
-                                </div>
-                                <div className="card-bg p-6 rounded-2xl border border-white/5 text-center shadow-lg">
-                                    <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
-                                        <i data-lucide="clock" color="#ff9f43"></i> 24/7
-                                    </div>
-                                    <p className="text-gray-400 text-sm">دعم صاحبك شغال</p>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* 2. المدرسين (Teachers) */}
+                        {view === 'teachers' && selectedSubject && (
+                            <div className="animate-in slide-in-from-right-10 duration-300">
+                                <h2 className="text-2xl font-bold mb-6 text-neon">مدرسين {selectedSubject.subject_name}</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    {selectedSubject.teachers.map((teacher, i) => (
+                                        <div key={i} onClick={() => { setSelectedTeacher(teacher); setView('chapters'); }}
+                                             className="glass-panel p-4 rounded-2xl cursor-pointer flex items-center gap-4 hover:bg-white/5">
+                                            <img src={teacher.image_url} className="w-20 h-20 rounded-xl object-cover bg-gray-800" />
+                                            <div>
+                                                <h3 className="font-bold text-xl">{teacher.name}</h3>
+                                                <span className="text-xs text-neon">اضغط للدخول</span>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
+                        )}
 
-                            {/* Hero Content */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                                {/* Image */}
-                                <div className="order-1 lg:order-2 relative flex justify-center">
-                                    <div className="absolute inset-0 bg-[#00f5c4]/20 blur-[80px] rounded-full"></div>
-                                    <img 
-                                        src="https://i.postimg.cc/2ys9RdV5/IMG-20260207-221213-980.jpg" 
-                                        alt="Full Mark Interface" 
-                                        className="relative z-10 w-full max-w-md rounded-[2.5rem] border-4 border-[#00f5c4]/20 shadow-2xl shadow-[#00f5c4]/10 object-cover transform hover:scale-105 transition-transform duration-500"
-                                    />
-                                </div>
-
-                                {/* Text */}
-                                <div className="text-right order-2 lg:order-1 space-y-6">
-                                    <h1 className="text-4xl md:text-6xl font-black leading-tight">
-                                        حلم الكلية اللي في <br/>
-                                        دماغك <br/>
-                                        يبتدي <span className="text-[#00f5c4] logo-text">Full Mark</span>
-                                    </h1>
-                                    <p className="text-xl text-gray-300 font-bold">
-                                        بنخلي المنهج صاحبك الجدع! (وببلاش)
-                                    </p>
-                                    
-                                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                                        <button 
-                                            onClick={handleStart}
-                                            className="flex-1 px-8 py-4 rounded-2xl bg-[#00f5c4] text-[#030508] font-black text-lg hover:shadow-[0_0_20px_rgba(0,245,196,0.4)] transition-all flex items-center justify-center gap-2"
-                                        >
-                                            <i data-lucide="log-in"></i> تسجيل الدخول
-                                        </button>
-                                        <a href="#features" className="flex-1 px-8 py-4 rounded-2xl border border-white/20 text-white font-bold hover:bg-white/5 transition-all text-center flex items-center justify-center">
-                                            شوف اللي مستنيك 👇
-                                        </a>
+                        {/* 3. الفصول (Chapters) */}
+                        {view === 'chapters' && selectedTeacher && (
+                            <div className="animate-in slide-in-from-right-10 duration-300">
+                                <div className="flex items-center gap-4 mb-8 p-4 bg-white/5 rounded-2xl">
+                                    <img src={selectedTeacher.image_url} className="w-16 h-16 rounded-full border-2 border-[#00f5c4]" />
+                                    <div>
+                                        <h2 className="text-xl font-bold">{selectedTeacher.name}</h2>
+                                        <p className="text-gray-400 text-sm">اختر الفصل الدراسي</p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </header>
-
-                    {/* === 2. Features Section === */}
-                    <section id="features" className="py-16 px-4 md:px-6 bg-[#0a0d14]">
-                        <div className="max-w-7xl mx-auto">
-                            <div className="text-center mb-12 space-y-4">
-                                <p className="text-[#ff9f43] font-bold">ليه تلزق معانا؟</p>
-                                <h2 className="text-3xl md:text-5xl font-black text-white">
-                                    كل اللي تحتاجه عشان تبقى <br/>
-                                    <span className="text-[#ff9f43] relative inline-block mt-2">
-                                        مطمن ومبسوط
-                                    </span>
-                                </h2>
-                                <p className="text-gray-400 max-w-2xl mx-auto mt-4">
-                                    من أول فيديو للشرح لحد ليلة الامتحان، فريق Full Mark ماسك إيدك بخفة دم وبساطة.
-                                </p>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <FeatureCard icon="activity" title="تدريبات تفاعلية" desc="بنوك أسئلة متدرجة المستويات تخليك تشوف نفسك بتعلى خطوة بخطوة وتتخانق مع الغلط." />
-                                <FeatureCard icon="calendar" title="خطة مذاكرة مرنة" desc="جداول أسبوعية جاهزة تظبط بين المدرسة والقعدة مع صحابك من غير ما تحس بذنب." />
-                                <FeatureCard icon="check-circle" title="اختبارات شاملة" desc="امتحانات شبه الحقيقة بابل شيت وتصحيح فوري وتحليل يقولك فين العك." />
-                                <FeatureCard icon="smile" title="مجتمع مرح" desc="شاتات ومسابقات يومية تخليك بتذاكر مع صحبة دايما مولعة الحماس." />
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* === 3. Free Pricing Section === */}
-                    <section className="py-20 px-4 md:px-6 relative overflow-hidden">
-                        <div className="max-w-7xl mx-auto relative z-10 text-center">
-                            
-                            <div className="mb-16">
-                                <p className="text-[#ff9f43] font-bold mb-2">مصاريف الدروس؟ سيبها علينا</p>
-                                <h2 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
-                                    كل المدرسين في جيبك <br/>
-                                    <span className="text-[#00f5c4] bg-white/5 px-4 rounded-xl mt-2 inline-block">مجاناً بالكامل</span>
-                                </h2>
-                                <p className="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed">
-                                    عارف إنك لسه داخل تالتة ثانوي ومصدوم من الأسعار؟ لو حسبتها تلاقي نفسك بتكسر الـ 3000 جنيه شهرياً.
-                                    <br/>
-                                    عشان كده <span className="text-[#00f5c4] font-bold logo-text">Full Mark</span> وفرتلك كل المواد ببلاش!
-                                </p>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto text-right mb-16">
-                                <ValueCard icon="file-text" title="المحاضرة + PDF + امتحان" desc="كل حصة بتنزل مع ملفها وواجب او كويز عشان تظبط المعلومة." />
-                                <ValueCard icon="zap" title="متأخرش عنك" desc="المحتوى بينزل خلال 24 ساعة من المنصة." />
-                                <ValueCard icon="monitor" title="جودة منصة" desc="نفس جودة الفيديوهات الرسمية مع تحكم في السرعة." />
-                                <ValueCard icon="refresh-cw" title="تحديث مستمر" desc="بنضيف ونغير مدرسين عشان دايما يبقى عندك الأحسن." />
-                            </div>
-
-                            {/* CTA Card */}
-                            <div className="card-bg p-8 rounded-3xl border border-white/10 max-w-lg mx-auto relative overflow-hidden group hover:border-[#00f5c4]/40 transition-all">
-                                <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-[#00f5c4] to-transparent"></div>
-                                
-                                <div className="flex justify-between items-center mb-6">
-                                    <span className="bg-[#ff9f43]/20 text-[#ff9f43] px-3 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
-                                        <i data-lucide="star" width="14"></i> العرض الأقوى
-                                    </span>
-                                    <span className="text-gray-400 text-sm">حساب طالب</span>
+                                <div className="space-y-4">
+                                    {selectedTeacher.chapters.map((chapter, i) => (
+                                        <div key={i} onClick={() => { setSelectedChapter(chapter); setView('lectures'); }}
+                                             className="glass-panel p-5 rounded-2xl flex justify-between items-center cursor-pointer hover:border-r-4 hover:border-r-[#00f5c4]">
+                                            <h3 className="font-bold text-lg">{chapter.chapter_name}</h3>
+                                            <div className="bg-[#00f5c4]/10 text-[#00f5c4] px-3 py-1 rounded-full text-xs">
+                                                {chapter.lectures.length} محاضرات
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-
-                                <div className="text-center mb-8">
-                                    <h3 className="text-6xl font-black text-white mb-2">0 <span className="text-2xl font-bold text-gray-400">ج.م</span></h3>
-                                    <p className="text-[#00f5c4] font-bold text-xl">مجـــــانـــاً 100%</p>
-                                    <p className="text-gray-400 mt-2">شامل كل المواد (علمي وأدبي) والمراجعات</p>
-                                </div>
-
-                                <button 
-                                    onClick={handleStart}
-                                    className="w-full py-4 rounded-xl bg-[#ff3e3e] text-white font-black text-xl hover:bg-[#ff2222] transition-colors shadow-[0_0_20px_rgba(255,62,62,0.3)] animate-pulse"
-                                >
-                                    ادخل ذاكر دلوقتي 🚀
-                                </button>
-                                <p className="text-xs text-gray-500 mt-4">اضغط هنا للانتقال لصفحة تسجيل الدخول</p>
                             </div>
-                        </div>
-                    </section>
+                        )}
 
-                    {/* Footer */}
-                    <footer className="py-8 border-t border-white/5 text-center text-gray-600 text-sm bg-[#0a0d14]">
-                        <p>Developed with ❤️ by <a href="https://t.me/elgizawy9" className="hover:text-[#00f5c4]">ELGIZAWY</a> © 2026</p>
-                    </footer>
-                </div>
-            );
-        }
-
-        // Sub-components
-        function FeatureCard({ icon, title, desc }) {
-            return (
-                <div className="card-bg p-8 rounded-[2rem] border border-white/5 text-right relative overflow-hidden group hover:border-[#00f5c4]/30 transition-all">
-                    <div className="w-14 h-14 bg-[#1a1f2e] rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-[#00f5c4] group-hover:text-black transition-colors">
-                        <i data-lucide={icon}></i>
+                        {/* 4. المحاضرات (Lectures) */}
+                        {view === 'lectures' && selectedChapter && (
+                            <div className="animate-in slide-in-from-right-10 duration-300">
+                                <h2 className="text-2xl font-bold mb-6 text-neon">{selectedChapter.chapter_name}</h2>
+                                <div className="space-y-8">
+                                    {selectedChapter.lectures.map((lecture, i) => (
+                                        <div key={i} className="bg-[#11141d] rounded-3xl p-6 border border-white/5">
+                                            <h3 className="text-lg font-bold mb-4 pb-2 border-b border-white/5 flex items-center gap-2">
+                                                <i data-lucide="folder" width="18" className="text-[#ff9f43]"></i> {lecture.lecture_name}
+                                            </h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                {lecture.videos.map((video, vIdx) => (
+                                                    <div key={vIdx} onClick={() => { setSelectedVideo(video); setView('player'); }}
+                                                         className="bg-black/30 p-3 rounded-xl flex gap-3 items-center cursor-pointer hover:bg-white/5 transition-colors group">
+                                                        <div className="w-12 h-12 bg-black rounded-lg flex items-center justify-center shrink-0 text-neon group-hover:scale-110 transition-transform">
+                                                            <i data-lucide="play" width="20" fill="currentColor"></i>
+                                                        </div>
+                                                        <div>
+                                                            <h4 className="font-bold text-sm text-gray-200 group-hover:text-white">{video.video_name}</h4>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-3">{title}</h3>
-                    <p className="text-gray-400 leading-relaxed">{desc}</p>
-                </div>
-            );
-        }
 
-        function ValueCard({ icon, title, desc }) {
-            return (
-                <div className="flex gap-4 card-bg p-6 rounded-2xl border border-white/5">
-                    <div className="shrink-0 w-12 h-12 bg-[#ff9f43]/10 rounded-xl flex items-center justify-center text-[#ff9f43]">
-                        <i data-lucide={icon}></i>
-                    </div>
-                    <div>
-                        <h3 className="text-lg font-bold text-white mb-1">{title}</h3>
-                        <p className="text-gray-400 text-sm">{desc}</p>
-                    </div>
+                    {/* 5. المشغل */}
+                    {view === 'player' && selectedVideo && (
+                        <VideoPlayer 
+                            src={selectedVideo.links?.[0]?.url} 
+                            onBack={() => setView('lectures')} 
+                        />
+                    )}
+
                 </div>
             );
         }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<LandingPage />);
+        root.render(<App />);
     </script>
 </body>
 </html>
