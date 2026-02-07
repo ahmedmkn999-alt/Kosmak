@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - Full Mark</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body { background-color: #030508; color: white; font-family: 'Cairo', sans-serif; }
+        /* حقول الإدخال */
+        .login-input { background-color: #11141d; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; }
+        .login-input:focus-within { border-color: #00f5c4; box-shadow: 0 0 15px rgba(0, 245, 196, 0.2); }
+        /* اللوحة الزجاجية للمميزات */
+        .glass-panel { 
+            background: rgba(17, 20, 29, 0.7); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1); 
+        }
+        .logo-text { direction: ltr; display: inline-flex; gap: 4px; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function LoginPage() {
+            // تفعيل الأيقونات
+            useEffect(() => {
+                lucide.createIcons();
+            }, []);
+
+            const [showPassword, setShowPassword] = useState(false);
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                alert("جاري التحقق من البيانات والدخول...");
+            };
+
+            return (
+                <div className="min-h-screen flex relative overflow-hidden">
+                    
+                    {/* خلفية جمالية */}
+                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#00f5c4]/10 blur-[120px] rounded-full pointer-events-none"></div>
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-[#ff9f43]/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+                    {/* === الجزء الأيمن: نموذج الدخول === */}
+                    <div className="w-full lg:w-1/2 flex flex-col justify-center p-6 md:p-16 relative z-10">
+                        <div className="max-w-md w-full mx-auto">
+                            
+                            {/* اللوجو */}
+                            <div className="flex items-center gap-3 mb-10 justify-center lg:justify-start">
+                                <img src="https://i.postimg.cc/2ys9RdV5/IMG-20260207-221213-980.jpg" alt="Logo" className="w-12 h-12 rounded-xl border border-white/20 shadow-lg shadow-[#00f5c4]/10 object-cover" />
+                                <h2 className="logo-text text-2xl font-black italic tracking-tighter text-white">
+                                    FULL <span className="text-[#00f5c4]">MARK</span>
+                                </h2>
+                            </div>
+
+                            <div className="mb-8 text-center lg:text-right">
+                                <h1 className="text-3xl font-black mb-2 text-white">أهلاً بيك يا بطل! 👋</h1>
+                                <p className="text-gray-400">سجل دخولك عشان تكمل رحلة التفوق <span className="text-[#00f5c4] font-bold">المجانية</span>.</p>
+                            </div>
+
+                            {/* الفورم */}
+                            <form onSubmit={handleLogin} className="space-y-5">
+                                
+                                {/* البريد / الهاتف */}
+                                <div>
+                                    <label className="block text-gray-400 text-sm mb-2 font-bold">رقم الموبايل أو الإيميل</label>
+                                    <div className="login-input rounded-xl flex items-center px-4 py-3">
+                                        <i data-lucide="mail" className="text-gray-500 shrink-0 ml-3" width="20"></i>
+                                        <input 
+                                            type="text" 
+                                            placeholder="اكتب رقمك هنا..."
+                                            className="bg-transparent border-none outline-none text-white w-full placeholder-gray-600 font-medium"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* كلمة المرور */}
+                                <div>
+                                    <label className="block text-gray-400 text-sm mb-2 font-bold">كلمة المرور</label>
+                                    <div className="login-input rounded-xl flex items-center px-4 py-3 relative">
+                                        <i data-lucide="lock" className="text-gray-500 shrink-0 ml-3" width="20"></i>
+                                        <input 
+                                            type={showPassword ? "text" : "password"} 
+                                            placeholder="••••••••"
+                                            className="bg-transparent border-none outline-none text-white w-full placeholder-gray-600 font-medium"
+                                            required
+                                        />
+                                        <button 
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute left-4 text-gray-500 hover:text-[#00f5c4] transition-colors focus:outline-none"
+                                        >
+                                            <i data-lucide={showPassword ? "eye-off" : "eye"} width="20"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* تذكرني و نسيت كلمة السر */}
+                                <div className="flex justify-between items-center text-sm mt-2">
+                                    <label className="flex items-center gap-2 cursor-pointer group select-none">
+                                        <input type="checkbox" className="accent-[#00f5c4] w-4 h-4 cursor-pointer rounded" />
+                                        <span className="text-gray-400 group-hover:text-white transition-colors">خليك فاكرني</span>
+                                    </label>
+                                    <a href="#" className="text-[#00f5c4] hover:text-[#00dbae] transition-colors font-bold">نسيت الباسورد؟</a>
+                                </div>
+
+                                {/* زر الدخول */}
+                                <button 
+                                    type="submit"
+                                    className="w-full py-4 rounded-xl bg-[#00f5c4] text-[#030508] font-black text-xl hover:bg-[#00dbae] transition-all shadow-[0_0_20px_rgba(0,245,196,0.3)] hover:shadow-[0_0_35px_rgba(0,245,196,0.5)] active:scale-[0.98] mt-6 flex justify-center items-center gap-2"
+                                >
+                                    <i data-lucide="log-in" width="24"></i> دخول للمنصة
+                                </button>
+                            </form>
+
+                            {/* إنشاء حساب */}
+                            <div className="mt-8 text-center border-t border-white/5 pt-6">
+                                <p className="text-gray-400 font-medium">
+                                    لسه معندكش حساب؟ 
+                                    <a href="#" className="text-[#ff9f43] font-bold hover:underline mr-2">اشترك مجاناً دلوقتي</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* === الجزء الأيسر: المميزات والأمان (يظهر في الشاشات الكبيرة) === */}
+                    <div className="hidden lg:flex w-1/2 relative items-center justify-center p-12 overflow-hidden bg-[#0a0d14]">
+                        
+                        {/* الخلفية: صورة المنصة */}
+                        <div className="absolute inset-0 z-0">
+                            <img src="https://i.postimg.cc/2ys9RdV5/IMG-20260207-221213-980.jpg" alt="Background" className="w-full h-full object-cover opacity-40 blur-[2px] scale-110" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#030508] via-[#030508]/70 to-transparent"></div>
+                        </div>
+
+                        {/* كارت المميزات الزجاجي */}
+                        <div className="glass-panel p-10 rounded-[2.5rem] max-w-lg w-full relative z-10 shadow-2xl border-r-4 border-r-[#00f5c4]">
+                            <h3 className="text-3xl font-black mb-8 text-white">
+                                منصتك <span className="text-[#00f5c4]">الآمنة</span> والأقوى
+                            </h3>
+                            
+                            <div className="space-y-6">
+                                {/* ميزة 1: الأمان */}
+                                <div className="flex items-start gap-4 p-4 rounded-2xl hover:bg-white/5 transition-colors cursor-default">
+                                    <div className="w-12 h-12 rounded-xl bg-[#00f5c4]/10 flex items-center justify-center text-[#00f5c4] shrink-0 border border-[#00f5c4]/20">
+                                        <i data-lucide="shield-check" width="24"></i>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-lg font-bold text-white mb-1">بياناتك في أمان تام</h4>
+                                        <p className="text-gray-400 text-sm leading-relaxed">نظام تشفير وحماية متكامل لبياناتك الشخصية، ركز في مذاكرتك وسيب الباقي علينا.</p>
+                                    </div>
+                                </div>
+                                
+                                {/* ميزة 2: المجانية */}
+                                <div className="flex items-start gap-4 p-4 rounded-2xl hover:bg-white/5 transition-colors cursor-default">
+                                    <div className="w-12 h-12 rounded-xl bg-[#ff9f43]/10 flex items-center justify-center text-[#ff9f43] shrink-0 border border-[#ff9f43]/20">
+                                        <i data-lucide="gift" width="24"></i>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-lg font-bold text-white mb-1">محتوى مجاني بالكامل</h4>
+                                        <p className="text-gray-400 text-sm leading-relaxed">استمتع بكل الفيديوهات، الامتحانات، والملازم من غير ما تدفع مليم واحد.</p>
+                                    </div>
+                                </div>
+
+                                {/* ميزة 3: الجودة */}
+                                <div className="flex items-start gap-4 p-4 rounded-2xl hover:bg-white/5 transition-colors cursor-default">
+                                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white shrink-0 border border-white/20">
+                                        <i data-lucide="zap" width="24"></i>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-lg font-bold text-white mb-1">سرعة واستقرار</h4>
+                                        <p className="text-gray-400 text-sm leading-relaxed">سيرفرات قوية تضمنلك تجربة سلسة جداً وقت الامتحانات والمراجعات.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mt-8 pt-4 border-t border-white/10 flex justify-between items-center text-xs text-gray-500 font-mono">
+                                <span className="flex items-center gap-1 text-[#00f5c4]"><i data-lucide="lock" width="12"></i> Secure Connection</span>
+                                <span>© 2026 Full Mark Platform</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<LoginPage />);
+    </script>
+</body>
+</html>
