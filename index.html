@@ -37,8 +37,9 @@
                 lucide.createIcons();
             }, []);
 
+            // === التعديل هنا: الدالة دي هي اللي بتنقل لصفحة الدخول ===
             const handleStart = () => {
-                alert("سيتم تحويلك لصفحة تسجيل الدخول...");
+                window.location.href = 'login.html';
             };
 
             return (
