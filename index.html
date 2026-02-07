@@ -1,31 +1,28 @@
 "use client";
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Play, MessageCircle, Clock, CheckCircle, 
   Calendar, Activity, Smile, FileText, 
-  Zap, Monitor, RefreshCw, Send, Star 
+  Zap, Monitor, RefreshCw, Send, Star, LogIn 
 } from 'lucide-react';
 
-export default function PreLoginLandingPage({ onStart }) {
-  // دالة للتعامل مع زر البدء
-  const handleStart = () => {
-    if (onStart) {
-      onStart();
-    } else {
-      console.log("Start clicked");
-    }
-  };
-
+// هذا المكون هو صفحة الترحيب فقط
+// onStart: هي الدالة التي ستنقل المستخدم لصفحة تسجيل الدخول عند الضغط على الأزرار
+export default function LandingPage({ onStart }) {
+  
   return (
     <div 
       className="min-h-screen text-white font-['Cairo'] overflow-x-hidden"
       dir="rtl"
-      // هذا السطر يضمن اللون الأسود حتى لو التيلويند فيه مشكلة
+      // ضمان اللون الأسود التلجي حتى لو فيه مشكلة في التيلويند
       style={{ backgroundColor: '#030508', color: '#ffffff' }}
     >
       
-      {/* Navbar */}
-      <nav className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto border-b border-white/5 sticky top-0 z-50 backdrop-blur-md bg-[#030508]/80">
+      {/* === Navbar === */}
+      <nav 
+        className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto border-b border-white/5 sticky top-0 z-50 backdrop-blur-md"
+        style={{ backgroundColor: 'rgba(3, 5, 8, 0.9)' }}
+      >
         <h2 className="text-2xl font-black italic tracking-tighter text-white flex items-center gap-2">
           FULL <span className="text-[#00f5c4]">MARK</span>
         </h2>
@@ -35,31 +32,31 @@ export default function PreLoginLandingPage({ onStart }) {
           rel="noopener noreferrer"
           className="bg-[#00f5c4] text-[#030508] px-4 py-2 rounded-full font-bold hover:bg-[#00dbae] transition-all flex items-center gap-2 text-sm"
         >
-          <Send size={16} /> تواصل معنا
+          <Send size={16} /> قناة التليجرام
         </a>
       </nav>
 
-      {/* === Section 1: Hero & Stats (نفس تصميم الصورة 1) === */}
+      {/* === 1. Hero Section (الإحصائيات والصورة) === */}
       <header className="relative pt-8 pb-10 px-6">
         <div className="max-w-7xl mx-auto">
           
-          {/* الإحصائيات في كروت علوية مثل التطبيق الأصلي */}
+          {/* كروت الإحصائيات (مثل الصورة الأولى) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-            <div className="bg-[#11141d] p-6 rounded-2xl border border-white/5 text-center shadow-lg">
+            <div className="p-6 rounded-2xl border border-white/5 text-center shadow-lg" style={{ backgroundColor: '#11141d' }}>
               <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
                 <Play fill="#ff9f43" size={20} /> 1 مليون+
               </div>
               <p className="text-gray-400 text-sm">مشاهدات لشرح روش</p>
             </div>
             
-            <div className="bg-[#11141d] p-6 rounded-2xl border border-white/5 text-center shadow-lg">
+            <div className="p-6 rounded-2xl border border-white/5 text-center shadow-lg" style={{ backgroundColor: '#11141d' }}>
               <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
                 <MessageCircle fill="#ff9f43" size={20} /> %98
               </div>
               <p className="text-gray-400 text-sm">بيقولوا ارتحنا نفسياً</p>
             </div>
 
-            <div className="bg-[#11141d] p-6 rounded-2xl border border-white/5 text-center shadow-lg">
+            <div className="p-6 rounded-2xl border border-white/5 text-center shadow-lg" style={{ backgroundColor: '#11141d' }}>
               <div className="text-[#ff9f43] text-2xl font-black mb-1 flex justify-center items-center gap-2">
                 <Clock size={24} /> 24/7
               </div>
@@ -69,37 +66,47 @@ export default function PreLoginLandingPage({ onStart }) {
 
           {/* الصورة الرئيسية والنص */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-             {/* الصورة المطلوبة */}
+             
+             {/* الصورة (يسار في الشاشات الكبيرة) */}
              <div className="order-1 lg:order-2 relative flex justify-center">
                 <div className="absolute inset-0 bg-[#00f5c4]/20 blur-[80px] rounded-full"></div>
                 <img 
                   src="https://i.postimg.cc/2ys9RdV5/IMG-20260207-221213-980.jpg" 
-                  alt="Full Mark Hero" 
-                  className="relative z-10 w-full max-w-md rounded-[2rem] border-2 border-[#00f5c4]/30 shadow-2xl shadow-[#00f5c4]/10 object-cover"
+                  alt="Full Mark Interface" 
+                  className="relative z-10 w-full max-w-md rounded-[2.5rem] border-4 border-[#00f5c4]/20 shadow-2xl shadow-[#00f5c4]/10 object-cover transform hover:scale-105 transition-transform duration-500"
                 />
              </div>
 
+             {/* النص (يمين) */}
              <div className="text-right order-2 lg:order-1 space-y-6">
                 <h1 className="text-4xl md:text-6xl font-black leading-tight">
                   حلم الكلية اللي في <br/>
                   دماغك <br/>
-                  يبتدي <span className="text-[#00f5c4]">مجاناً</span> معانا
+                  يبتدي <span className="text-[#00f5c4] relative">
+                    Full Mark
+                  </span>
                 </h1>
                 <p className="text-xl text-gray-300 font-bold">
                   بنخلي المنهج صاحبك الجدع! (وببلاش)
                 </p>
-                <button 
-                  onClick={handleStart}
-                  className="w-full md:w-auto px-10 py-4 rounded-2xl bg-[#00f5c4] text-[#030508] font-black text-xl hover:shadow-[0_0_30px_rgba(0,245,196,0.4)] transition-all"
-                >
-                  ابدأ المذاكرة الآن
-                </button>
+                
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <button 
+                    onClick={onStart}
+                    className="flex-1 px-8 py-4 rounded-2xl bg-[#00f5c4] text-[#030508] font-black text-lg hover:shadow-[0_0_20px_rgba(0,245,196,0.4)] transition-all flex items-center justify-center gap-2"
+                  >
+                    <LogIn size={24} /> تسجيل الدخول الآن
+                  </button>
+                  <button className="flex-1 px-8 py-4 rounded-2xl border border-white/20 text-white font-bold hover:bg-white/5 transition-all">
+                    شوف اللي مستنيك 👇
+                  </button>
+                </div>
              </div>
           </div>
         </div>
       </header>
 
-      {/* === Section 2: Features (نفس نصوص الصور 2 و 3) === */}
+      {/* === 2. Features Section (مميزات المنصة) === */}
       <section className="py-16 px-6" style={{ backgroundColor: '#0a0d14' }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 space-y-4">
@@ -108,7 +115,6 @@ export default function PreLoginLandingPage({ onStart }) {
               كل اللي تحتاجه عشان تبقى <br/>
               <span className="text-[#ff9f43] relative inline-block mt-2">
                  مطمن ومبسوط
-                 <svg className="absolute w-full h-2 -bottom-1 left-0 text-[#ff9f43]" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="3" fill="none"/></svg>
               </span>
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto mt-4">
@@ -117,46 +123,31 @@ export default function PreLoginLandingPage({ onStart }) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* كارت 1 */}
-            <div className="bg-[#11141d] p-8 rounded-[2rem] border border-white/5 text-right relative overflow-hidden group hover:border-[#00f5c4]/30 transition-all">
-               <div className="w-14 h-14 bg-[#1a1f2e] rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-[#00f5c4] group-hover:text-black transition-colors">
-                 <Activity size={28} />
-               </div>
-               <h3 className="text-2xl font-bold text-white mb-3">تدريبات تفاعلية</h3>
-               <p className="text-gray-400 leading-relaxed">بنوك أسئلة متدرجة المستويات تخليك تشوف نفسك بتعلى خطوة بخطوة وتتخانق مع الغلط.</p>
-            </div>
-
-            {/* كارت 2 */}
-            <div className="bg-[#11141d] p-8 rounded-[2rem] border border-white/5 text-right relative overflow-hidden group hover:border-[#00f5c4]/30 transition-all">
-               <div className="w-14 h-14 bg-[#1a1f2e] rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-[#00f5c4] group-hover:text-black transition-colors">
-                 <Calendar size={28} />
-               </div>
-               <h3 className="text-2xl font-bold text-white mb-3">خطة مذاكرة مرنة</h3>
-               <p className="text-gray-400 leading-relaxed">جداول أسبوعية جاهزة تظبط بين المدرسة والقعدة مع صحابك من غير ما تحس بذنب.</p>
-            </div>
-
-            {/* كارت 3 */}
-            <div className="bg-[#11141d] p-8 rounded-[2rem] border border-white/5 text-right relative overflow-hidden group hover:border-[#00f5c4]/30 transition-all">
-               <div className="w-14 h-14 bg-[#1a1f2e] rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-[#00f5c4] group-hover:text-black transition-colors">
-                 <CheckCircle size={28} />
-               </div>
-               <h3 className="text-2xl font-bold text-white mb-3">اختبارات شاملة</h3>
-               <p className="text-gray-400 leading-relaxed">امتحانات شبه الحقيقة بابل شيت وتصحيح فوري وتحليل يقولك فين العك.</p>
-            </div>
-
-            {/* كارت 4 */}
-            <div className="bg-[#11141d] p-8 rounded-[2rem] border border-white/5 text-right relative overflow-hidden group hover:border-[#00f5c4]/30 transition-all">
-               <div className="w-14 h-14 bg-[#1a1f2e] rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-[#00f5c4] group-hover:text-black transition-colors">
-                 <Smile size={28} />
-               </div>
-               <h3 className="text-2xl font-bold text-white mb-3">مجتمع مرح</h3>
-               <p className="text-gray-400 leading-relaxed">شاتات ومسابقات يومية تخليك بتذاكر مع صحبة دايما مولعة الحماس.</p>
-            </div>
+            <FeatureCard 
+              icon={<Activity size={28} />} 
+              title="تدريبات تفاعلية" 
+              desc="بنوك أسئلة متدرجة المستويات تخليك تشوف نفسك بتعلى خطوة بخطوة وتتخانق مع الغلط."
+            />
+            <FeatureCard 
+              icon={<Calendar size={28} />} 
+              title="خطة مذاكرة مرنة" 
+              desc="جداول أسبوعية جاهزة تظبط بين المدرسة والقعدة مع صحابك من غير ما تحس بذنب."
+            />
+            <FeatureCard 
+              icon={<CheckCircle size={28} />} 
+              title="اختبارات شاملة" 
+              desc="امتحانات شبه الحقيقة بابل شيت وتصحيح فوري وتحليل يقولك فين العك."
+            />
+            <FeatureCard 
+              icon={<Smile size={28} />} 
+              title="مجتمع مرح" 
+              desc="شاتات ومسابقات يومية تخليك بتذاكر مع صحبة دايما مولعة الحماس."
+            />
           </div>
         </div>
       </section>
 
-      {/* === Section 3: Pricing/Free (تعديل النصوص لتناسب المجاني - الصور 4 و 5) === */}
+      {/* === 3. Value & Free Pricing (قسم المجانية) === */}
       <section className="py-20 px-6 relative overflow-hidden">
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           
@@ -164,7 +155,7 @@ export default function PreLoginLandingPage({ onStart }) {
             <p className="text-[#ff9f43] font-bold mb-2">مصاريف الدروس؟ سيبها علينا</p>
             <h2 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
               كل المدرسين في جيبك <br/>
-              <span className="text-[#00f5c4]">مجاناً بالكامل</span>
+              <span className="text-[#00f5c4] bg-white/5 px-4 rounded-xl mt-2 inline-block">مجاناً بالكامل</span>
             </h2>
             <p className="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed">
               عارف إنك لسه داخل تالتة ثانوي ومصدوم من الأسعار؟ لو حسبتها تلاقي نفسك بتكسر الـ 3000 جنيه شهرياً غير المواصلات.
@@ -173,62 +164,29 @@ export default function PreLoginLandingPage({ onStart }) {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto text-right">
-            <div className="flex gap-4 bg-[#11141d] p-6 rounded-2xl border border-white/5">
-              <div className="shrink-0 w-12 h-12 bg-[#ff9f43]/10 rounded-xl flex items-center justify-center text-[#ff9f43]">
-                <FileText size={24} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white mb-1">المحاضرة + PDF + امتحان</h3>
-                <p className="text-gray-400 text-sm">كل حصة بتنزل مع ملفها وواجب او كويز عشان تظبط المعلومة في دماغك.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-4 bg-[#11141d] p-6 rounded-2xl border border-white/5">
-              <div className="shrink-0 w-12 h-12 bg-[#ff9f43]/10 rounded-xl flex items-center justify-center text-[#ff9f43]">
-                <Zap size={24} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white mb-1">متأخرش عنك</h3>
-                <p className="text-gray-400 text-sm">المحتوى بينزل خلال 24 ساعة من المنصة، ولو جاهز بينزل في نفس اليوم.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-4 bg-[#11141d] p-6 rounded-2xl border border-white/5">
-              <div className="shrink-0 w-12 h-12 bg-[#ff9f43]/10 rounded-xl flex items-center justify-center text-[#ff9f43]">
-                <Monitor size={24} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white mb-1">جودة منصة</h3>
-                <p className="text-gray-400 text-sm">نفس جودة الفيديوهات الرسمية مع تحكم في السرعة واختيار الدقة اللي تناسب باقتك.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-4 bg-[#11141d] p-6 rounded-2xl border border-white/5">
-              <div className="shrink-0 w-12 h-12 bg-[#ff9f43]/10 rounded-xl flex items-center justify-center text-[#ff9f43]">
-                <RefreshCw size={24} />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-white mb-1">تحديث مستمر</h3>
-                <p className="text-gray-400 text-sm">ممكن نضيف او نغير مدرسين طول الترم عشان دايما يبقى عندك احسن شرح.</p>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto text-right mb-16">
+            <ValueCard icon={<FileText size={24} />} title="المحاضرة + PDF + امتحان" desc="كل حصة بتنزل مع ملفها وواجب او كويز عشان تظبط المعلومة في دماغك." />
+            <ValueCard icon={<Zap size={24} />} title="متأخرش عنك" desc="المحتوى بينزل خلال 24 ساعة من المنصة، ولو جاهز بينزل في نفس اليوم." />
+            <ValueCard icon={<Monitor size={24} />} title="جودة منصة" desc="نفس جودة الفيديوهات الرسمية مع تحكم في السرعة واختيار الدقة اللي تناسب باقتك." />
+            <ValueCard icon={<RefreshCw size={24} />} title="تحديث مستمر" desc="ممكن نضيف او نغير مدرسين طول الترم عشان دايما يبقى عندك احسن شرح." />
           </div>
 
-          {/* === CTA Section (مكان الاشتراك) === */}
-          <div className="mt-16 bg-[#11141d] p-8 rounded-3xl border border-white/10 max-w-lg mx-auto relative overflow-hidden">
+          {/* === CTA Card (كارت الاشتراك المجاني) === */}
+          <div className="p-8 rounded-3xl border border-white/10 max-w-lg mx-auto relative overflow-hidden" style={{ backgroundColor: '#11141d' }}>
+             {/* تأثير إضاءة علوية */}
              <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-[#00f5c4] to-transparent"></div>
              
              <div className="flex justify-between items-center mb-6">
                 <span className="bg-[#ff9f43]/20 text-[#ff9f43] px-3 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
                   <Star size={14} fill="#ff9f43"/> الأكثر طلباً
                 </span>
-                <span className="text-gray-400 text-sm">اشتراك مفتوح</span>
+                <span className="text-gray-400 text-sm">حساب مجاني</span>
              </div>
 
              <div className="text-center mb-8">
-               <h3 className="text-5xl font-black text-white mb-2">مجــاناً</h3>
-               <p className="text-gray-400">لأي شعبة سواء علوم أو رياضة أو أدبي، شامل كل المواد.</p>
+               <h3 className="text-6xl font-black text-white mb-2">0 <span className="text-2xl font-bold text-gray-400">ج.م</span></h3>
+               <p className="text-[#00f5c4] font-bold text-xl">مجـــــانـــاً</p>
+               <p className="text-gray-400 mt-2">لأي شعبة سواء علوم أو رياضة أو أدبي، شامل كل المواد.</p>
              </div>
 
              <div className="space-y-4 mb-8">
@@ -238,29 +196,57 @@ export default function PreLoginLandingPage({ onStart }) {
                </div>
                <div className="flex items-center gap-3 text-right bg-white/5 p-3 rounded-lg">
                  <CheckCircle className="text-[#00f5c4] shrink-0" size={20} />
-                 <span className="text-sm">تقدر تجرب قبل ما تذاكر، ومعاك دعم 24/7</span>
+                 <span className="text-sm">ذاكر براحتك، معاك دعم 24/7</span>
                </div>
              </div>
 
              <button 
-                onClick={handleStart}
-                className="w-full py-4 rounded-xl bg-[#ff3e3e] text-white font-black text-xl hover:bg-[#ff2222] transition-colors shadow-lg shadow-red-500/20"
+                onClick={onStart}
+                className="w-full py-4 rounded-xl bg-[#ff3e3e] text-white font-black text-xl hover:bg-[#ff2222] transition-colors shadow-[0_0_20px_rgba(255,62,62,0.3)] animate-pulse"
               >
-                اشترك دلوقتي (مجاناً)
+                ادخل لصفحة تسجيل الدخول 🚀
               </button>
           </div>
           
           <div className="mt-8 text-gray-500 text-sm">
-            للتواصل مع المطور أو الدعم: <a href="https://t.me/elgizawy9" className="text-[#00f5c4] underline">@elgizawy9</a>
+            للتواصل مع المطور: <a href="https://t.me/elgizawy9" className="text-[#00f5c4] underline">@elgizawy9</a>
           </div>
 
         </div>
       </section>
 
-      {/* Footer */}
+      {/* === Footer === */}
       <footer className="py-8 border-t border-white/5 text-center text-gray-600 text-sm" style={{ backgroundColor: '#0a0d14' }}>
         <p>Developed with ❤️ by <a href="https://t.me/elgizawy9" className="hover:text-[#00f5c4]">ELGIZAWY</a> © 2024</p>
       </footer>
+    </div>
+  );
+}
+
+// === مكونات فرعية للكروت لتقليل تكرار الكود ===
+
+function FeatureCard({ icon, title, desc }) {
+  return (
+    <div className="p-8 rounded-[2rem] border border-white/5 text-right relative overflow-hidden group hover:border-[#00f5c4]/30 transition-all" style={{ backgroundColor: '#11141d' }}>
+       <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white mb-6 group-hover:bg-[#00f5c4] group-hover:text-black transition-colors" style={{ backgroundColor: '#1a1f2e' }}>
+         {icon}
+       </div>
+       <h3 className="text-2xl font-bold text-white mb-3">{title}</h3>
+       <p className="text-gray-400 leading-relaxed">{desc}</p>
+    </div>
+  );
+}
+
+function ValueCard({ icon, title, desc }) {
+  return (
+    <div className="flex gap-4 p-6 rounded-2xl border border-white/5" style={{ backgroundColor: '#11141d' }}>
+      <div className="shrink-0 w-12 h-12 bg-[#ff9f43]/10 rounded-xl flex items-center justify-center text-[#ff9f43]">
+        {icon}
+      </div>
+      <div>
+        <h3 className="text-lg font-bold text-white mb-1">{title}</h3>
+        <p className="text-gray-400 text-sm">{desc}</p>
+      </div>
     </div>
   );
 }
