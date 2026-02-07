@@ -1,39 +1,35 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { 
-  Play, 
-  MessageCircle, 
-  Users, 
-  Clock, 
-  CheckCircle, 
-  Calendar, 
-  Activity, 
-  Smile, 
-  FileText, 
-  Zap, 
-  Monitor, 
-  RefreshCw 
+  Play, MessageCircle, Users, Clock, CheckCircle, Calendar, 
+  Activity, Smile, FileText, Zap, Monitor, RefreshCw 
 } from 'lucide-react';
 
-// === 1. صفحة الترحيب (Landing Page - التصميم الجديد) ===
+// لون الخلفية الأساسي الجديد (أسود تلجي داكن)
+const MAIN_BG = "#030508"; 
+// لون للخلفيات الثانوية (أفتح قليلاً للتباين)
+const SECONDARY_BG = "#0a0d14"; 
+
+// === 1. صفحة الترحيب (Landing Page - بعد التعديل وإضافة الصورة) ===
 function LandingPage({ onStart }) {
   return (
-    <div className="min-h-screen bg-[#0b0f19] text-white font-['Cairo'] overflow-x-hidden">
+    // استخدام لون الخلفية الجديد
+    <div className={`min-h-screen bg-[${MAIN_BG}] text-white font-['Cairo'] overflow-x-hidden`}>
       
-      {/* Navbar بسيطة */}
+      {/* Navbar */}
       <nav className="flex justify-between items-center px-6 py-6 max-w-7xl mx-auto">
         <h2 className="text-2xl font-black italic tracking-tighter text-white">
           FULL <span className="text-[#00f5c4]">MARK</span>
         </h2>
         <button 
           onClick={onStart} 
-          className="bg-[#00f5c4] text-[#0b0f19] px-6 py-2 rounded-full font-bold hover:bg-[#00dbae] transition-all"
+          className="bg-[#00f5c4] text-[#030508] px-6 py-2 rounded-full font-bold hover:bg-[#00dbae] transition-all"
         >
           ابدأ المذاكرة
         </button>
       </nav>
 
-      {/* === Section 1: Hero Section (الصورة الأولى) === */}
+      {/* === Hero Section (تم تعديل الصورة هنا) === */}
       <header className="relative pt-10 pb-20 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
@@ -61,7 +57,7 @@ function LandingPage({ onStart }) {
             <div className="flex flex-wrap gap-4 pt-4">
               <button 
                 onClick={onStart}
-                className="px-8 py-4 rounded-2xl bg-[#00f5c4] text-[#0b0f19] font-black text-lg hover:shadow-[0_0_20px_rgba(0,245,196,0.4)] transition-all"
+                className="px-8 py-4 rounded-2xl bg-[#00f5c4] text-[#030508] font-black text-lg hover:shadow-[0_0_20px_rgba(0,245,196,0.4)] transition-all"
               >
                 ابدأ دلوقتي
               </button>
@@ -70,7 +66,7 @@ function LandingPage({ onStart }) {
               </button>
             </div>
 
-            {/* الإحصائيات (تحت الأزرار) */}
+            {/* الإحصائيات */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 border-t border-white/10 pt-8">
               <StatItem number="2M+" label="طلبة حاطينا" sub="في المفضلة" />
               <StatItem number="1M+" label="مشاهدات" sub="بيقولوا ارتحنا" />
@@ -79,22 +75,29 @@ function LandingPage({ onStart }) {
             </div>
           </div>
 
-          {/* الصورة التعبيرية (يسار) */}
-          <div className="order-1 lg:order-2 flex justify-center relative">
-            <div className="absolute inset-0 bg-[#00f5c4]/20 blur-[100px] rounded-full"></div>
-            <div className="relative bg-gradient-to-tr from-[#1a1f2e] to-[#0b0f19] border border-white/10 rounded-[3rem] p-8 w-full max-w-md aspect-video flex items-center justify-center overflow-hidden group">
-               {/* شكل تعبيري مكان الصورة الثري دي */}
-               <div className="text-[8rem] group-hover:scale-110 transition-transform duration-500">🚀</div>
-               <div className="absolute top-10 right-10 text-6xl animate-bounce">🎓</div>
-               <div className="absolute bottom-10 left-10 text-6xl animate-pulse">📚</div>
+          {/* --- الصورة الجديدة (يسار) --- */}
+          <div className="order-1 lg:order-2 flex justify-center relative z-10">
+            {/* تأثير التوهج خلف الصورة */}
+            <div className="absolute inset-0 bg-[#00f5c4]/20 blur-[100px] rounded-full transform translate-y-10"></div>
+            
+            {/* حاوية الصورة */}
+            <div className="relative rounded-[3rem] border-2 border-white/10 p-2 bg-gradient-to-tr from-white/5 to-transparent backdrop-blur-sm w-full max-w-md aspect-[4/3] overflow-hidden group shadow-2xl shadow-[#00f5c4]/10">
+               {/* الصورة التي طلبتها */}
+               <img 
+                 src="https://i.postimg.cc/2ys9RdV5/IMG-20260207-221213-980.jpg" 
+                 alt="Full Mark Platform Interface" 
+                 className="w-full h-full object-cover rounded-[2.5rem] transform group-hover:scale-105 transition-transform duration-700"
+               />
+               {/* طبقة خفيفة فوق الصورة لدمجها مع الخلفية الداكنة */}
+               <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-t from-[#030508]/40 via-transparent to-transparent pointer-events-none"></div>
             </div>
           </div>
 
         </div>
       </header>
 
-      {/* === Section 2: Features (الصورة الثانية) === */}
-      <section className="py-20 px-6 bg-[#080b12]">
+      {/* === Section 2: Features === */}
+      <section className={`py-20 px-6 bg-[${SECONDARY_BG}]`}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 space-y-4">
             <p className="text-[#00f5c4] font-bold">ليه تلزق معانا؟</p>
@@ -107,35 +110,17 @@ function LandingPage({ onStart }) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <FeatureCard 
-              icon={<Activity size={32} />} 
-              title="تدريبات تفاعلية" 
-              desc="بنوك أسئلة متدرجة المستويات تخليك تشوف نفسك بتعلى خطوة بخطوة وتتخانق مع الغلط."
-            />
-            <FeatureCard 
-              icon={<Calendar size={32} />} 
-              title="خطة مذاكرة مرنة" 
-              desc="جداول أسبوعية جاهزة تظبط بين المدرسة والقعدة مع صحابك من غير ما تحس بذنب."
-            />
-            <FeatureCard 
-              icon={<CheckCircle size={32} />} 
-              title="اختبارات شاملة" 
-              desc="امتحانات شبه الحقيقة بابل شيت وتصحيح فوري وتحليل يقولك فين العك."
-            />
-            <FeatureCard 
-              icon={<Smile size={32} />} 
-              title="مجتمع مرح" 
-              desc="شاتات ومسابقات يومية تخليك بتذاكر مع صحبة دايما مولعة الحماس."
-            />
+            <FeatureCard icon={<Activity size={32} />} title="تدريبات تفاعلية" desc="بنوك أسئلة متدرجة المستويات تخليك تشوف نفسك بتعلى خطوة بخطوة وتتخانق مع الغلط." />
+            <FeatureCard icon={<Calendar size={32} />} title="خطة مذاكرة مرنة" desc="جداول أسبوعية جاهزة تظبط بين المدرسة والقعدة مع صحابك من غير ما تحس بذنب." />
+            <FeatureCard icon={<CheckCircle size={32} />} title="اختبارات شاملة" desc="امتحانات شبه الحقيقة بابل شيت وتصحيح فوري وتحليل يقولك فين العك." />
+            <FeatureCard icon={<Smile size={32} />} title="مجتمع مرح" desc="شاتات ومسابقات يومية تخليك بتذاكر مع صحبة دايما مولعة الحماس." />
           </div>
         </div>
       </section>
 
-      {/* === Section 3: Pricing/Value (الصورة الثالثة) === */}
+      {/* === Section 3: Pricing/Value === */}
       <section className="py-20 px-6 relative overflow-hidden">
-        {/* خلفية خفيفة */}
-        <div className="absolute top-0 left-0 w-full h-full bg-[#0b0f19] z-0"></div>
-        
+        <div className={`absolute top-0 left-0 w-full h-full bg-[${MAIN_BG}] z-0`}></div>
         <div className="max-w-7xl mx-auto relative z-10 text-center">
           <div className="mb-16">
             <p className="text-[#ff9f43] font-bold mb-2">مصاريف الدروس؟ سيبها علينا</p>
@@ -146,37 +131,21 @@ function LandingPage({ onStart }) {
             <p className="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed">
               عارف إنك لسه داخل تالتة ثانوي ومصدوم من الأسعار؟ لو حسبتها تلاقي نفسك بتكسر الـ 3000 جنيه شهرياً غير المواصلات.
               <br/><br/>
-              عشان كده عملنالك <span className="text-[#00f5c4] font-bold">Full Mark</span>: تجمعنا فيه كل الأسامي التقيلة من أول عربي ولغات لحد المواد العلمية والأدبية، بالفيديوهات، الملازم، الكويزات، وجداول جاهزة.
+              عشان كده عملنالك <span className="text-[#00f5c4] font-bold">Full Mark</span>: تجمعنا فيه كل الأسامي التقيلة من أول عربي ولغات لحد المواد العلمية والأدبية.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto text-right">
-            <ValueCard 
-              icon={<FileText className="text-[#ff9f43]" />}
-              title="المحاضرة + PDF + امتحان"
-              desc="كل حصة بتنزل مع ملفها وواجب او كويز عشان تظبط المعلومة في دماغك."
-            />
-            <ValueCard 
-              icon={<Zap className="text-[#ff9f43]" />}
-              title="متأخرش عنك"
-              desc="المحتوى بينزل خلال 24 ساعة من المنصة، ولو جاهز بينزل في نفس اليوم."
-            />
-            <ValueCard 
-              icon={<Monitor className="text-[#ff9f43]" />}
-              title="جودة منصة"
-              desc="نفس جودة الفيديوهات الرسمية مع تحكم في السرعة واختيار الدقة اللي تناسب باقتك."
-            />
-            <ValueCard 
-              icon={<RefreshCw className="text-[#ff9f43]" />}
-              title="تحديث مستمر"
-              desc="ممكن نضيف او نغير مدرسين طول الترم عشان دايما يبقى عندك احسن شرح."
-            />
+            <ValueCard icon={<FileText className="text-[#ff9f43]" />} title="المحاضرة + PDF + امتحان" desc="كل حصة بتنزل مع ملفها وواجب او كويز عشان تظبط المعلومة في دماغك." />
+            <ValueCard icon={<Zap className="text-[#ff9f43]" />} title="متأخرش عنك" desc="المحتوى بينزل خلال 24 ساعة من المنصة، ولو جاهز بينزل في نفس اليوم." />
+            <ValueCard icon={<Monitor className="text-[#ff9f43]" />} title="جودة منصة" desc="نفس جودة الفيديوهات الرسمية مع تحكم في السرعة واختيار الدقة اللي تناسب باقتك." />
+            <ValueCard icon={<RefreshCw className="text-[#ff9f43]" />} title="تحديث مستمر" desc="ممكن نضيف او نغير مدرسين طول الترم عشان دايما يبقى عندك احسن شرح." />
           </div>
 
           <div className="mt-16">
              <button 
                 onClick={onStart}
-                className="px-12 py-5 rounded-full bg-[#00f5c4] text-[#0b0f19] font-black text-2xl hover:scale-105 transition-transform shadow-[0_0_30px_rgba(0,245,196,0.3)]"
+                className="px-12 py-5 rounded-full bg-[#00f5c4] text-[#030508] font-black text-2xl hover:scale-105 transition-transform shadow-[0_0_30px_rgba(0,245,196,0.3)]"
               >
                 ابدأ رحلتك المجانية 🚀
               </button>
@@ -185,17 +154,17 @@ function LandingPage({ onStart }) {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 border-t border-white/5 text-center text-gray-600 text-sm bg-[#080b12]">
+      <footer className={`py-8 border-t border-white/5 text-center text-gray-600 text-sm bg-[${SECONDARY_BG}]`}>
         <p>Developed with ❤️ by ELGIZAWY © 2024</p>
       </footer>
     </div>
   );
 }
 
-// === Sub-components for Landing Page ===
+// === Sub-components for Landing Page (تعديل الألوان) ===
 function StatItem({ number, label, sub }) {
   return (
-    <div className="bg-[#1a1f2e] p-4 rounded-2xl border border-white/5 text-center group hover:border-[#00f5c4]/30 transition-colors">
+    <div className={`bg-[${SECONDARY_BG}] p-4 rounded-2xl border border-white/5 text-center group hover:border-[#00f5c4]/30 transition-colors`}>
       <h3 className="text-2xl font-black text-white mb-1">{number}</h3>
       <p className="text-[#00f5c4] font-bold text-sm">{label}</p>
       <p className="text-gray-500 text-xs">{sub}</p>
@@ -205,7 +174,7 @@ function StatItem({ number, label, sub }) {
 
 function FeatureCard({ icon, title, desc }) {
   return (
-    <div className="bg-[#131722] p-8 rounded-[2rem] border border-white/5 hover:bg-[#1a1f2e] hover:border-[#00f5c4]/30 transition-all group text-right">
+    <div className={`bg-[${SECONDARY_BG}]/50 p-8 rounded-[2rem] border border-white/5 hover:bg-[${SECONDARY_BG}] hover:border-[#00f5c4]/30 transition-all group text-right`}>
       <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-gray-400 group-hover:text-[#00f5c4] group-hover:bg-[#00f5c4]/10 transition-colors mb-6">
         {icon}
       </div>
@@ -217,7 +186,7 @@ function FeatureCard({ icon, title, desc }) {
 
 function ValueCard({ icon, title, desc }) {
   return (
-    <div className="flex gap-4 bg-[#131722] p-6 rounded-2xl border border-white/5 hover:border-[#ff9f43]/30 transition-colors">
+    <div className={`flex gap-4 bg-[${SECONDARY_BG}] p-6 rounded-2xl border border-white/5 hover:border-[#ff9f43]/30 transition-colors`}>
       <div className="shrink-0 w-12 h-12 bg-[#ff9f43]/10 rounded-xl flex items-center justify-center">
         {icon}
       </div>
@@ -242,19 +211,18 @@ export default function FullMarkPlatform() {
   });
 
   useEffect(() => {
-    const isLogged = localStorage.getItem('activeCode');
-    // يمكنك تفعيل السطر التالي لو أردت تخطي صفحة البداية للمسجلين
-    // if (isLogged) setShowLanding(false);
-  }, []);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch('https://uploadi.vercel.app/data.json');
         const data = await res.json();
-        setRawData(data);
+        // تحقق بسيط أن البيانات مصفوفة
+        setRawData(Array.isArray(data) ? data : []);
         setLoading(false);
-      } catch (err) { setLoading(false); }
+      } catch (err) { 
+        console.error("Error fetching data:", err);
+        setLoading(false); 
+        setRawData([]); // تعيين مصفوفة فارغة في حالة الخطأ
+      }
     };
     fetchData();
   }, []);
@@ -265,24 +233,25 @@ export default function FullMarkPlatform() {
     else if (step === 'chapters') setStep('teachers');
     else if (step === 'lectures') setStep('chapters');
     else if (step === 'videos') setStep('lectures');
+    // تم التأكد من وجود خطوة الرجوع من الفيديوهات
   };
 
-  // عرض صفحة الترحيب
   if (showLanding) {
     return <LandingPage onStart={() => setShowLanding(false)} />;
   }
 
-  // شاشة التحميل للمنصة
+  // شاشة التحميل مع اللون الجديد
   if (loading) return (
-    <div className="min-h-screen bg-[#020605] flex items-center justify-center">
+    <div className={`min-h-screen bg-[${MAIN_BG}] flex items-center justify-center`}>
       <div className="w-12 h-12 border-4 border-[#00f5c4] border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
 
   // واجهة المنصة الداخلية
   return (
-    <div className="min-h-screen bg-[#020605] text-white p-6 font-['Cairo'] relative overflow-hidden">
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#00f5c4]/10 blur-[120px] rounded-full"></div>
+    // استخدام لون الخلفية الجديد
+    <div className={`min-h-screen bg-[${MAIN_BG}] text-white p-6 font-['Cairo'] relative overflow-hidden`}>
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#00f5c4]/5 blur-[120px] rounded-full"></div>
       
       <div className="max-w-6xl mx-auto relative z-10">
         <header className="flex justify-between items-center mb-12">
@@ -290,7 +259,7 @@ export default function FullMarkPlatform() {
             FULL MARK
           </h1>
           <div className="flex gap-3">
-             <button onClick={() => setShowLanding(true)} className="bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full text-sm text-gray-400">الرئيسية</button>
+             <button onClick={() => setShowLanding(true)} className="bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full text-sm text-gray-400 transition-all">الرئيسية</button>
             {step !== 'years' && (
               <button onClick={goBack} className="bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 px-6 py-2 rounded-full transition-all flex items-center gap-2">
                 <span>←</span> رجوع
@@ -299,12 +268,12 @@ export default function FullMarkPlatform() {
           </div>
         </header>
 
-        <div className="transition-all duration-500">
-          {/* 1. السنين */}
+        <div className="transition-all duration-500 pb-20">
+          {/* 1. السنين (تمت إضافة حماية ?.map) */}
           {step === 'years' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-left-4 duration-500">
-              {rawData.map((year, idx) => (
-                <div key={idx} onClick={() => { setSelection({...selection, year: year}); setStep('subjects'); }} className="group relative p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-[#00f5c4]/50 transition-all cursor-pointer overflow-hidden">
+              {rawData?.map((year, idx) => (
+                <div key={idx} onClick={() => { setSelection({...selection, year: year}); setStep('subjects'); }} className={`group relative p-8 rounded-3xl bg-[${SECONDARY_BG}] border border-white/10 hover:border-[#00f5c4]/50 transition-all cursor-pointer overflow-hidden`}>
                   <div className="absolute inset-0 bg-gradient-to-br from-[#00f5c4]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   <h3 className="text-2xl font-bold mb-2">{year.year_name}</h3>
                   <p className="text-gray-400">اضغط لاستعراض مواد السنة الدراسية</p>
@@ -313,11 +282,11 @@ export default function FullMarkPlatform() {
             </div>
           )}
 
-          {/* 2. المواد */}
+          {/* 2. المواد (تمت إضافة حماية ?.map) */}
           {step === 'subjects' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in zoom-in duration-500">
-              {selection.year?.subjects.map((sub, idx) => (
-                <div key={idx} onClick={() => { setSelection({...selection, subject: sub}); setStep('teachers'); }} className="p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-[#00f5c4]/10 hover:scale-105 transition-all cursor-pointer text-center">
+              {selection.year?.subjects?.map((sub, idx) => (
+                <div key={idx} onClick={() => { setSelection({...selection, subject: sub}); setStep('teachers'); }} className={`p-6 rounded-2xl bg-[${SECONDARY_BG}] border border-white/5 hover:bg-[#00f5c4]/10 hover:scale-105 transition-all cursor-pointer text-center`}>
                   <div className="w-16 h-16 bg-[#00f5c4]/20 rounded-full mx-auto mb-4 flex items-center justify-center">
                     <span className="text-2xl">📚</span>
                   </div>
@@ -327,78 +296,80 @@ export default function FullMarkPlatform() {
             </div>
           )}
 
-          {/* 3. المدرسين */}
+          {/* 3. المدرسين (تم إصلاح خطأ الحرف الأول وإضافة الحماية) */}
           {step === 'teachers' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              {selection.subject?.teachers.map((t, idx) => (
-                <div key={idx} onClick={() => { setSelection({...selection, teacher: t}); setStep('chapters'); }} className="flex items-center p-6 rounded-3xl bg-white/5 border border-white/10 hover:border-[#00f5c4]/30 cursor-pointer transition-all">
-                  <div className="w-20 h-20 bg-gradient-to-br from-[#00f5c4] to-[#004e92] rounded-2xl flex items-center justify-center text-3xl font-bold">
-                    {t.teacher_name[3]}
+              {selection.subject?.teachers?.map((t, idx) => (
+                <div key={idx} onClick={() => { setSelection({...selection, teacher: t}); setStep('chapters'); }} className={`flex items-center p-6 rounded-3xl bg-[${SECONDARY_BG}] border border-white/10 hover:border-[#00f5c4]/30 cursor-pointer transition-all`}>
+                  <div className="w-20 h-20 bg-gradient-to-br from-[#00f5c4] to-[#004e92] rounded-2xl flex items-center justify-center text-3xl font-bold overflow-hidden shrink-0">
+                    {/* FIX: استخدام charAt(0) بأمان */}
+                    {t.teacher_name?.charAt(0) || '?'}
                   </div>
                   <div className="mr-6">
                     <h3 className="text-xl font-bold">{t.teacher_name}</h3>
-                    <p className="text-[#00f5c4] text-sm">خبير مادة {selection.subject.subject_name}</p>
+                    <p className="text-[#00f5c4] text-sm">خبير مادة {selection.subject?.subject_name}</p>
                   </div>
                 </div>
               ))}
             </div>
           )}
 
-          {/* 4. الفصول */}
+          {/* 4. الفصول (تمت إضافة حماية ?.map) */}
           {step === 'chapters' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
-              {selection.teacher?.chapters.map((chapter, idx) => (
-                <div key={idx} onClick={() => { setSelection({...selection, chapter: chapter}); setStep('lectures'); }} className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-[#00f5c4]/5 transition-all cursor-pointer">
+              {selection.teacher?.chapters?.map((chapter, idx) => (
+                <div key={idx} onClick={() => { setSelection({...selection, chapter: chapter}); setStep('lectures'); }} className={`p-6 rounded-2xl bg-[${SECONDARY_BG}] border border-white/10 hover:bg-[#00f5c4]/5 transition-all cursor-pointer`}>
                   <h3 className="text-xl font-bold text-[#00f5c4] mb-2">{chapter.chapter_name}</h3>
-                  <p className="text-gray-400 text-sm">يحتوي على {chapter.lectures.length} محاضرات</p>
+                  <p className="text-gray-400 text-sm">يحتوي على {chapter.lectures?.length || 0} محاضرات</p>
                 </div>
               ))}
             </div>
           )}
 
-          {/* 5. المحاضرات */}
+          {/* 5. المحاضرات (تمت إضافة حماية ?.map) */}
           {step === 'lectures' && (
             <div className="space-y-4 animate-in fade-in duration-500">
-              <h2 className="text-2xl font-bold mb-6 text-[#00f5c4]">محاضرات {selection.chapter.chapter_name}</h2>
-              {selection.chapter.lectures.map((lec, idx) => (
-                <div key={idx} onClick={() => { setSelection({...selection, lecture: lec}); setStep('videos'); }} className="flex justify-between items-center bg-white/5 p-5 rounded-xl border border-white/5 hover:border-[#00f5c4]/40 transition-all cursor-pointer group">
+              <h2 className="text-2xl font-bold mb-6 text-[#00f5c4]">محاضرات {selection.chapter?.chapter_name}</h2>
+              {selection.chapter?.lectures?.map((lec, idx) => (
+                <div key={idx} onClick={() => { setSelection({...selection, lecture: lec}); setStep('videos'); }} className={`flex justify-between items-center bg-[${SECONDARY_BG}] p-5 rounded-xl border border-white/5 hover:border-[#00f5c4]/40 transition-all cursor-pointer group`}>
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-[#00f5c4]/10 flex items-center justify-center text-[#00f5c4]">
+                    <div className="w-10 h-10 rounded-full bg-[#00f5c4]/10 flex items-center justify-center text-[#00f5c4] font-bold">
                       {idx + 1}
                     </div>
                     <span className="text-lg">{lec.lecture_name}</span>
                   </div>
-                  <span className="text-gray-500 text-sm group-hover:text-[#00f5c4]">عرض الفيديوهات ←</span>
+                  <span className="text-gray-500 text-sm group-hover:text-[#00f5c4] transition-colors">عرض الفيديوهات ←</span>
                 </div>
               ))}
             </div>
           )}
 
-          {/* 6. الفيديوهات */}
+          {/* 6. الفيديوهات (تم إصلاح زر التشغيل وإضافة الحماية) */}
           {step === 'videos' && (
             <div className="space-y-6 animate-in fade-in duration-500">
               <div className="flex items-center gap-4 mb-8">
                 <div className="h-10 w-2 bg-[#00f5c4] rounded-full"></div>
-                <h2 className="text-2xl font-bold">فيديوهات محاضرة: {selection.lecture.lecture_name}</h2>
+                <h2 className="text-2xl font-bold">فيديوهات محاضرة: {selection.lecture?.lecture_name}</h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {selection.lecture.videos.map((vid, idx) => (
-                  <div key={idx} className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:border-[#00f5c4]/50 transition-all">
-                    <div className="aspect-video bg-black rounded-xl mb-4 flex items-center justify-center border border-white/5 relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-[#00f5c4]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <span className="text-4xl">🎬</span>
-                    </div>
-                    <h4 className="text-lg font-bold mb-4">{vid.video_name || `فيديو رقم ${idx + 1}`}</h4>
-                    <a href={vid.url} target="_blank" rel="noopener noreferrer" className="block w-full text-center bg-[#00f5c4] text-black font-bold py-3 rounded-xl hover:bg-[#00d4aa] transition-colors">
-                      تشغيل الفيديو
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
+              
+              {/* التحقق من وجود فيديوهات قبل عمل map */}
+              {selection.lecture?.videos?.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {selection.lecture.videos.map((vid, idx) => {
+                    // FIX: التحقق من وجود الرابط
+                    const hasUrl = vid.url && vid.url.trim() !== '';
+                    return (
+                      <div key={idx} className={`bg-[${SECONDARY_BG}] rounded-2xl p-6 border border-white/10 hover:border-[#00f5c4]/50 transition-all group`}>
+                        <div className="aspect-video bg-black/50 rounded-xl mb-4 flex items-center justify-center border border-white/5 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-[#00f5c4]/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <span className="text-4xl group-hover:scale-110 transition-transform">🎬</span>
+                        </div>
+                        <h4 className="text-lg font-bold mb-4 truncate">{vid.video_name || `فيديو رقم ${idx + 1}`}</h4>
+                        
+                        {/* زر التشغيل الآمن */}
+                        <a 
+                          href={hasUrl ? vid.url : '#'} 
+                          target={hasUrl ? "_blank" : "_self"} 
+                          rel="noopener noreferrer" 
+                          onClick={(e) => !hasUrl && e.preventDefault()} // منع الضغط إذا لم يوجد رابط
+           
